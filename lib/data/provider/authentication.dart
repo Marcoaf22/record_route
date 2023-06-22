@@ -19,8 +19,8 @@ class Authentication {
     // return true;
 
     try {
-      final Response response = await _dio
-          .post('/api/app/login', data: {"email": email, "password": password});
+      final Response response = await _dio.post('/api/app/login',
+          data: {"username": email, "password": password});
 
       UserProfile user = UserProfile.fromJson(response.data['data']);
 
@@ -72,7 +72,9 @@ class Authentication {
     // if (!response.data['data'].isUndefined) {
     // toastr.info('Error', response.data['data']);
     // }
-    toastr.error(response.data['message']);
+    if (response.data != null) {
+      toastr.error(response.data['message']);
+    }
     // return null;
   }
 }

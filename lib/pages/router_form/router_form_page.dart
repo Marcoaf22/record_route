@@ -26,6 +26,121 @@ class RouterFormPage extends StatelessWidget {
                 Expanded(
                   child: Column(
                     children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 20.0, right: 20, bottom: 10, top: 20),
+                        child: TextField(
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              hintText: 'Nombre de ruta'),
+                          onChanged: (String value) {
+                            if (value != null) {
+                              _.entity.name = value;
+                            }
+                          },
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Seleccione un producto'),
+                      ),
+                      Center(
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            isExpanded: true,
+                            hint: const Row(
+                              children: [
+                                Icon(
+                                  Icons.list,
+                                  size: 16,
+                                  color: Colors.black,
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    'Seleccionar',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            items: _.products
+                                .map((item) => DropdownMenuItem<Product>(
+                                      value: item,
+                                      child: Text(
+                                        item.description ?? '',
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ))
+                                .toList(),
+                            value: _.product,
+                            onChanged: (value) {
+                              if (value != null) {
+                                print(value.description);
+                                _.product = value;
+                                _.update();
+                              }
+                            },
+                            buttonStyleData: ButtonStyleData(
+                              height: 50,
+                              width: 90.0.wp,
+                              padding:
+                                  const EdgeInsets.only(left: 14, right: 14),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(14),
+                                border: Border.all(
+                                  color: Colors.black26,
+                                ),
+                                color: Colors.white,
+                              ),
+                              elevation: 2,
+                            ),
+                            iconStyleData: const IconStyleData(
+                              icon: Icon(
+                                Icons.arrow_forward_ios_outlined,
+                              ),
+                              iconSize: 14,
+                              iconEnabledColor: Colors.yellow,
+                              iconDisabledColor: Colors.grey,
+                            ),
+                            dropdownStyleData: DropdownStyleData(
+                              maxHeight: 40.0.hp,
+                              width: 90.0.wp,
+                              padding: null,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(14),
+                                color: Colors.white,
+                              ),
+                              elevation: 8,
+                              offset: const Offset(0, 0),
+                              scrollbarTheme: ScrollbarThemeData(
+                                radius: const Radius.circular(40),
+                                thickness: MaterialStateProperty.all<double>(6),
+                                thumbVisibility:
+                                    MaterialStateProperty.all<bool>(true),
+                              ),
+                            ),
+                            menuItemStyleData: const MenuItemStyleData(
+                              height: 40,
+                              padding: EdgeInsets.only(left: 14, right: 14),
+                            ),
+                          ),
+                        ),
+                      ),
                       const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text('Seleccione una planta'),
@@ -46,11 +161,11 @@ class RouterFormPage extends StatelessWidget {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    'Select Item',
+                                    'Seleccionar',
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.yellow,
+                                      color: Colors.black,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -194,25 +309,33 @@ class RouterFormPage extends StatelessWidget {
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () async {
+                            if (_.entity.name.isEmpty) {
+                              ToastrService().info('Faltan datos',
+                                  'El nombre de la ruta es requerido');
+                              return;
+                            }
+
                             if (_.plant == null) {
                               ToastrService().info('Faltan datos',
                                   'Debe seleccionar una planta');
                               return;
                             }
+                            if (_.product == null) {
+                              ToastrService().info('Faltan datos',
+                                  'Debe seleccionar un producto');
+                              return;
+                            }
+
                             if (_.validateForm()) {
                               ToastrService().info(
                                   'Faltan datos', 'Debe seleccionar una EESS');
                               return;
                             }
                             bool result = await _.save();
-                            // if (result) {
                             ToastrService().success(
                                 title: 'Ruta',
                                 message: 'La ruta ha sido creada');
                             Get.offAndToNamed(Routes.routerDetail);
-                            // Get.toNamed(Routes.routerDetail);
-                            // Get.back(result: {'save': true});
-                            // }
                           },
                         ),
                       )

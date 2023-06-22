@@ -3,10 +3,11 @@ import 'package:get/get.dart';
 import 'package:record_route/data/service/get_location.dart';
 
 import 'package:record_route/pages/router/router_controller.dart';
-import 'package:record_route/data/model/router.dart' as Model;
+// import 'package:record_route/data/model/router.dart' as Model;
 import 'package:record_route/routes/app_pages.dart';
 import 'package:record_route/util/dialogs.dart';
 import 'package:record_route/util/percent_width_height.dart';
+import 'package:record_route/data/model/user_profile.dart' as Models;
 
 class RouterPage extends StatelessWidget {
   const RouterPage({super.key});
@@ -65,18 +66,8 @@ class RouterPage extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: TextButton(
                         onPressed: () async {
-                          // bool result = await showAcceptDialog(
-                          //     backgroundAccept: Colors.cyan,
-                          //     contentText:
-                          //         "¿Esta seguro de iniciar la ruta?",
-                          //     title: "Ruta");
-                          // if (result) {
-                          // _.create();
-
                           await Get.toNamed(Routes.routerForm);
-
                           _.updateSetting();
-                          // }
                         },
                         style: TextButton.styleFrom(
                             padding: const EdgeInsets.all(10),
@@ -90,7 +81,7 @@ class RouterPage extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               itemBuilder: (buildContext, index) {
-                Model.Router router = _.routes[index];
+                Models.Route router = _.routes[index];
                 return Container(
                   width: 90.0.wp,
                   height: 8.0.hp,
@@ -120,12 +111,12 @@ class RouterPage extends StatelessWidget {
                               style: TextStyle(),
                             ),
                             Text(
-                              "Hora Inicio: ${router.duration} AM",
+                              "Hora Inicio: 12 AM",
                               style:
                                   TextStyle(fontSize: 11, fontFamily: 'Roboco'),
                             ),
                             Text(
-                              "Hora Fin:${router.duration} AM",
+                              "Hora Fin: 3 AM",
                               style:
                                   TextStyle(fontSize: 11, fontFamily: 'Roboco'),
                             ),
@@ -139,7 +130,7 @@ class RouterPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "${router.duration} Hr.",
+                              "2 Hr.",
                               style: TextStyle(fontSize: 13),
                             ),
                           ],

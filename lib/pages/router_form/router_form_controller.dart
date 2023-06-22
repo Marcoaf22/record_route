@@ -5,20 +5,24 @@ import 'package:record_route/data/model/auth/setting.dart';
 import 'package:record_route/data/model/basic.dart';
 
 import 'package:record_route/data/model/router.dart';
+import 'package:record_route/data/model/router_create.dart';
 import 'package:record_route/data/model/user.dart';
 import 'package:record_route/data/model/user_profile.dart';
 import 'package:record_route/data/service/get_location.dart';
 
 class RouterFormController extends GetxController {
-  Seeting setting = Auth.instance.getSeeting();
+  RouterCreate entity = RouterCreate.empty();
 
+  Seeting setting = Auth.instance.getSeeting();
   Company? plant;
+  Product? product;
 
   List<Company> plants = Auth.instance.getUser().factories;
   List<Company> stations = Auth.instance.getUser().companies;
+  List<Product> products = Auth.instance.getUser().products;
 
-  EntityRouter entity = EntityRouter();
   UserProfile user = Auth.instance.getUser();
+  GetLocation service = Get.find<GetLocation>();
 
   RouterFormController() {
     print('🎈 Controller form');
@@ -51,21 +55,30 @@ class RouterFormController extends GetxController {
 
   Future<bool> save() async {
     print('save');
-    await create();
-    return true;
+    bool result = await service.checkPermission();
+    if (result) {
+      await 
+    }
+    return result;
   }
 
   initLocation() async {
-    GetLocation service = Get.find<GetLocation>();
-    // var a = await service.determinePosition();
-    // service.updateLoction();
     service.serviceStatusListen();
     service.locationListen();
   }
 
+  prepareData() {
+    entity.factoryId = plant!.id!;
+    entity.companies = stations
+        .where((element) => element.selected)
+        .map((e) => CompanyId(id: e.id!))
+        .toList();
+    entity.driverId = user.driver?.id ?? 0;
+    entity.productoId = product?.productoId ?? 0;
+  }
+
   create() {
     initLocation();
-
     setting.onRecord = true;
     setting.stepIndex = 1;
     setting.stations = stations.where((element) => element.selected).toList();

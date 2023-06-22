@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:location/location.dart';
+import 'package:record_route/data/model/auth/auth.dart';
 import 'package:record_route/data/service/get_location.dart';
 import 'package:record_route/pages/home/home_controller.dart';
 import 'package:record_route/routes/app_pages.dart';
@@ -233,6 +234,12 @@ class HomeWidget extends StatelessWidget {
                   ],
                 ),
               ),
+              TextButton(
+                  onPressed: () {
+                    Auth.instance.logOut();
+                    Get.offAllNamed(Routes.login);
+                  },
+                  child: Text('Salir'))
             ],
           ),
         );

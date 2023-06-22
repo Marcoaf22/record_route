@@ -12,7 +12,6 @@ class RouterDetailController extends GetxController {
   Company? fuelPlant;
   Seeting setting = Auth.instance.getSeeting();
 
-  EntityRouter entity = EntityRouter();
   UserProfile userProfile = Auth.instance.getUser();
   User? user = Auth.instance.getUser().user;
 

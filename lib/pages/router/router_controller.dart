@@ -8,11 +8,10 @@ import 'package:record_route/data/model/user_profile.dart';
 import 'package:record_route/routes/app_pages.dart';
 
 class RouterController extends GetxController {
-  List<Router> routes = [];
+  List<Route> routes = [];
   bool onRecord = false;
   Seeting setting = Auth.instance.getSeeting();
 
-  EntityRouter entity = EntityRouter();
   UserProfile userProfile = Auth.instance.getUser();
   User? user = Auth.instance.getUser().user;
 
@@ -20,86 +19,7 @@ class RouterController extends GetxController {
   List<Basic> location = [];
 
   RouterController() {
-    routes.add(Router(
-        date: DateTime.now().toString(),
-        destiny: "Av alemana",
-        name: "Ruta #",
-        endHour: "19:00",
-        startHour: "12:00",
-        duration: "08:40",
-        origin: "3 Anillo av aurelio"));
-    routes.add(Router(
-        date: DateTime.now().toString(),
-        destiny: "Av alemana",
-        name: "Ruta #",
-        endHour: "19:00",
-        startHour: "12:00",
-        duration: "08:40",
-        origin: "3 Anillo av aurelio"));
-    routes.add(Router(
-        date: DateTime.now().toString(),
-        destiny: "Av alemana",
-        name: "Ruta #",
-        endHour: "19:00",
-        startHour: "12:00",
-        duration: "08:40",
-        origin: "3 Anillo av aurelio"));
-    routes.add(Router(
-        date: DateTime.now().toString(),
-        destiny: "Av alemana",
-        name: "Ruta #",
-        endHour: "19:00",
-        startHour: "12:00",
-        duration: "08:40",
-        origin: "3 Anillo av aurelio"));
-    routes.add(Router(
-        date: DateTime.now().toString(),
-        destiny: "Av alemana",
-        name: "Ruta #",
-        endHour: "19:00",
-        startHour: "12:00",
-        duration: "08:40",
-        origin: "3 Anillo av aurelio"));
-    routes.add(Router(
-        date: DateTime.now().toString(),
-        destiny: "Av alemana",
-        name: "Ruta #",
-        endHour: "19:00",
-        startHour: "12:00",
-        duration: "08:40",
-        origin: "3 Anillo av aurelio"));
-    routes.add(Router(
-        date: DateTime.now().toString(),
-        destiny: "Av alemana",
-        name: "Ruta #",
-        endHour: "19:00",
-        startHour: "12:00",
-        duration: "08:40",
-        origin: "3 Anillo av aurelio"));
-    routes.add(Router(
-        date: DateTime.now().toString(),
-        destiny: "Av alemana",
-        name: "Ruta #",
-        endHour: "19:00",
-        startHour: "12:00",
-        duration: "08:40",
-        origin: "3 Anillo av aurelio"));
-    routes.add(Router(
-        date: DateTime.now().toString(),
-        destiny: "Av alemana",
-        name: "Ruta #",
-        endHour: "19:00",
-        startHour: "12:00",
-        duration: "08:40",
-        origin: "3 Anillo av aurelio"));
-    routes.add(Router(
-        date: DateTime.now().toString(),
-        destiny: "Av alemana",
-        name: "Ruta #",
-        endHour: "19:00",
-        startHour: "12:00",
-        duration: "08:40",
-        origin: "3 Anillo av aurelio"));
+    routes = Auth.instance.getUser().routes;
   }
 
   editRouter() {
