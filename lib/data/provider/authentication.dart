@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get/instance_manager.dart';
 import 'package:record_route/core/common/services.dart';
 import 'package:record_route/data/model/auth/auth.dart';
+import 'package:record_route/data/model/user_profile.dart';
 import 'package:record_route/data/model/user.dart';
 import 'package:record_route/util/message.dart';
 import 'package:record_route/util/toastr.dart';
@@ -18,47 +19,28 @@ class Authentication {
     // return true;
 
     try {
-      // final Response response = await _dio.post('/auth',
-      //     options: Options(headers: {"username": email, "password": password}));
+      final Response response = await _dio
+          .post('/api/app/login', data: {"email": email, "password": password});
 
-      Session s = Session.fromJson({
-        "token": 'treu',
-      });
+      UserProfile user = UserProfile.fromJson(response.data['data']);
+
+      Session s = Session(
+          token: response.data['data']['token'],
+          tokenType: response.data['data']['tokenType']);
+
       await Auth.instance.setSession(s.toJson());
 
+      await Auth.instance.setUser(user.toJson());
+
       // _dio.options = BaseOptions(
-      //     baseUrl: enviroment['backendUrl'],
+      //     // baseUrl: enviroment['backendUrl'],
       //     headers: {'Authorization': 'Bearer ${response.data["token"]}'});
 
-      return await getUser(1);
       return true;
     } catch (e) {
       if (e is DioError) {
         onError(e.response);
       }
-      return false;
-    }
-  }
-
-  Future<bool> getUser(id) async {
-    try {
-      // final Response response = await _dio.post('/auth/$id/reconnect');
-      // User? user =
-      // await Auth.instance.setUser((response.data) as Map<String, dynamic>);
-      User user = User.fromMap({
-        "name": "lucas alonso",
-        "lastName": "Sanchez lopez",
-        "company": "Saguapac SRl.",
-        "companyId": 23,
-        "phone": "78451265",
-        "address": "Calle san marino",
-        "email": "lucas@mail.com",
-        "age": 32,
-        "urlImage":
-            "https://media.istockphoto.com/id/160409804/es/foto/retrato-de-un-hombre-adulto.jpg?s=612x612&w=0&k=20&c=vGcRimiOWEUdSVsZx2I49IAb8Yx906tfqCjlJYWiBZo="
-      });
-      return Auth.instance.setUser(user.toMap()) != null;
-    } catch (e) {
       return false;
     }
   }
@@ -84,9 +66,12 @@ class Authentication {
       // return null;
     }
     if (response.statusCode == 404) {
-      toastr.info('Error', 'Error no encontra');
+      toastr.info('Error', 'Error no encontrado');
       // return null;
     }
+    // if (!response.data['data'].isUndefined) {
+    // toastr.info('Error', response.data['data']);
+    // }
     toastr.error(response.data['message']);
     // return null;
   }

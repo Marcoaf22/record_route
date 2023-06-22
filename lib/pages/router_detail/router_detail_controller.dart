@@ -4,23 +4,32 @@ import 'package:record_route/data/model/auth/auth.dart';
 import 'package:record_route/data/model/auth/setting.dart';
 import 'package:record_route/data/model/basic.dart';
 import 'package:record_route/data/model/router.dart';
-import 'package:record_route/data/model/user.dart';
+import 'package:record_route/data/model/user_profile.dart';
 import 'package:record_route/data/service/get_location.dart';
 
 class RouterDetailController extends GetxController {
-  List<BasicSelected> stations = [];
-  Basic? fuelPlant;
+  List<Company> stations = [];
+  Company? fuelPlant;
   Seeting setting = Auth.instance.getSeeting();
 
   EntityRouter entity = EntityRouter();
-  User user = Auth.instance.getUser();
+  UserProfile userProfile = Auth.instance.getUser();
+  User? user = Auth.instance.getUser().user;
 
   RouterDetailController() {
     print('🎁 Router detail');
     stations = setting.stations;
     fuelPlant = setting.fuelPlant;
-    print("planta:  ${fuelPlant?.name}");
     stations.sort((a, b) => a.index - b.index);
+  }
+
+  String getCompany() {
+    Company? a = userProfile.companies
+        .firstWhereOrNull((element) => element.id == user?.companyId);
+    if (a == null) {
+      return "";
+    }
+    return a.name ?? "";
   }
 
   nextStep(int nextStep) {

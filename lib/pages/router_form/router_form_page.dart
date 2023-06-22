@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:record_route/data/model/basic.dart';
+import 'package:record_route/data/model/user_profile.dart';
 
 import 'package:record_route/pages/router_form/router_form_controller.dart';
 import 'package:record_route/routes/app_pages.dart';
@@ -57,10 +58,10 @@ class RouterFormPage extends StatelessWidget {
                               ],
                             ),
                             items: _.plants
-                                .map((item) => DropdownMenuItem<Basic>(
+                                .map((item) => DropdownMenuItem<Company>(
                                       value: item,
                                       child: Text(
-                                        item.name,
+                                        item.name ?? '',
                                         style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
@@ -133,7 +134,7 @@ class RouterFormPage extends StatelessWidget {
                           width: 90.0.wp,
                           child: ListView.builder(
                             itemBuilder: (BuildContext context, int i) {
-                              BasicSelected item = _.stations[i];
+                              Company item = _.stations[i];
                               return GestureDetector(
                                 onTap: () {
                                   item.selected = !item.selected;
@@ -170,7 +171,7 @@ class RouterFormPage extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(item.name),
+                                      Text(item.name ?? ''),
                                       Text(item.index > 0
                                           ? item.index.toString()
                                           : ''),

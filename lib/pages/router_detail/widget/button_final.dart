@@ -51,11 +51,15 @@ class ButtonFinal extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 9),
-                  child: Text(
-                    "${label}",
-                    style: TextStyle(color: Colors.white, fontSize: 17),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 9),
+                    child: Text(
+                      label,
+                      overflow: TextOverflow.clip,
+                      maxLines: 2,
+                      style: const TextStyle(color: Colors.white, fontSize: 17),
+                    ),
                   ),
                 )
               ],

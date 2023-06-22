@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:record_route/data/model/basic.dart';
 
 import 'package:record_route/data/model/router.dart' as Model;
+import 'package:record_route/data/model/user_profile.dart';
 import 'package:record_route/pages/router_detail/router_detail_controller.dart';
 import 'package:record_route/pages/router_detail/widget/button_option.dart';
 import 'package:record_route/pages/router_detail/widget/button_final.dart';
@@ -16,7 +17,7 @@ class RouterDetailPage extends StatelessWidget {
     return GetBuilder<RouterDetailController>(
       init: RouterDetailController(),
       builder: (_) => Scaffold(
-        appBar: AppBar(title: Text("${_.user.company}")),
+        appBar: AppBar(title: Text(_.getCompany())),
         body: SafeArea(
           child: Column(
             children: [
@@ -83,7 +84,7 @@ class RouterDetailPage extends StatelessWidget {
                       indexSelected: _.setting.stepIndex,
                     ),
                     ...List.generate(_.stations.length, (int i) {
-                      BasicSelected item = _.stations[i];
+                      Company item = _.stations[i];
                       return ButtonFinal(
                         icon: Icons.reply_outlined,
                         onPressed: () async {

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:record_route/data/model/auth/auth.dart';
-import 'package:record_route/data/model/user.dart';
+import 'package:record_route/data/model/user_profile.dart';
+import 'package:record_route/data/service/get_location.dart';
 import 'package:record_route/pages/home/widget/home_widget.dart';
 import 'package:record_route/data/model/auth/setting.dart';
 
@@ -12,15 +13,18 @@ enum RequestState { loading, initial }
 
 class HomeController extends GetxController {
   Rx<RequestState> staterequest = RequestState.initial.obs;
+  bool requestLocation = false;
 
   List<Widget> listPage = [
     HomeWidget(),
-    RouterPage(),
+    const RouterPage(),
   ];
 
   int indexSelected = 0;
 
-  User? user;
+  UserProfile userProfile = Auth.instance.getUser();
+  User? user = Auth.instance.getUser().user;
+
   Seeting setting = Auth.instance.getSeeting();
 
   HomeController();
@@ -37,9 +41,20 @@ class HomeController extends GetxController {
   @override
   void onReady() async {
     super.onReady();
-    user = await Auth.instance.getUser();
     print('❤ onReady - HomeController');
+    GetLocation service = Get.find<GetLocation>();
+    service.serviceStatusListen();
+    service.checkPermission();
     update(['homeWidget']);
+  }
+
+  String getCompany() {
+    Company? a = userProfile.companies
+        .firstWhereOrNull((element) => element.id == user?.companyId);
+    if (a == null) {
+      return "";
+    }
+    return a.name ?? "";
   }
 
   void updateIndexSelected(index) {

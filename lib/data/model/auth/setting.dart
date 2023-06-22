@@ -1,11 +1,12 @@
 import 'package:record_route/data/model/basic.dart';
+import 'package:record_route/data/model/user_profile.dart';
 
 class Seeting {
   bool darkMode = false;
   bool onRecord = false;
   int stepIndex = -1;
-  List<BasicSelected> stations = [];
-  Basic? fuelPlant;
+  List<Company> stations = [];
+  Company? fuelPlant;
   Seeting(
       {required this.darkMode,
       this.onRecord = false,
@@ -20,11 +21,11 @@ class Seeting {
         stepIndex: json['stepIndex'] as int,
         stations: json["stations"] == null
             ? []
-            : List<BasicSelected>.from(
-                json["stations"].map((x) => BasicSelected.fromJson(x))),
+            : List<Company>.from(
+                json["stations"].map((x) => Company.fromJson(x))),
         fuelPlant: json["fuelPlant"] == null
             ? null
-            : Basic.fromJson(json['fuelPlant']));
+            : Company.fromJson(json['fuelPlant']));
   }
 
   Map<String, dynamic> toJson() => {

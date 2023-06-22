@@ -19,7 +19,7 @@ class IconContainer extends StatelessWidget {
           color: Colors.black12,
           offset: const Offset(4, 4),
           sigma: 4,
-          child: Image.asset('assets/logo.jpg'),
+          child: Image.asset('assets/logo.png'),
         ));
   }
 }

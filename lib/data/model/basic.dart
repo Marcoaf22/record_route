@@ -59,18 +59,18 @@ class BasicSelected {
       };
 }
 
-List<Basic> fuelPlants = [
-  Basic(id: 1, name: 'Planta cotoca'),
-  Basic(id: 1, name: 'YPFB Palmasola.'),
-  Basic(id: 1, name: 'Discar'),
-  Basic(id: 1, name: 'Alcasa'),
-  Basic(id: 1, name: 'YPFB Puerto Suares.'),
-];
+// List<Basic> fuelPlants = [
+//   Basic(id: 1, name: 'Planta cotoca'),
+//   Basic(id: 1, name: 'YPFB Palmasola.'),
+//   Basic(id: 1, name: 'Discar'),
+//   Basic(id: 1, name: 'Alcasa'),
+//   Basic(id: 1, name: 'YPFB Puerto Suares.'),
+// ];
 
-List<BasicSelected> gasStations = [
-  BasicSelected(id: 1, name: 'EESS Guayacan'),
-  BasicSelected(id: 1, name: 'EESS Pampa.'),
-  BasicSelected(id: 1, name: 'EESS Cotoca'),
-  BasicSelected(id: 1, name: 'EESS La colorada.'),
-  BasicSelected(id: 1, name: 'EESS Banzer 6 anillo'),
-];
+// List<BasicSelected> gasStations = [
+//   BasicSelected(id: 1, name: 'EESS Guayacan'),
+//   BasicSelected(id: 1, name: 'EESS Pampa.'),
+//   BasicSelected(id: 1, name: 'EESS Cotoca'),
+//   BasicSelected(id: 1, name: 'EESS La colorada.'),
+//   BasicSelected(id: 1, name: 'EESS Banzer 6 anillo'),
+// ];

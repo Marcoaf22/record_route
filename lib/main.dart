@@ -28,9 +28,10 @@ class MyApp extends StatelessWidget {
     ));
 
     return GetMaterialApp(
-      title: 'Control de Pacientes',
+      title: 'Record route',
       debugShowCheckedModeBanner: false,
       initialRoute: Routes.splash,
+
       theme: appThemeDataLight,
       // translations: AppTranslation.translations,
       defaultTransition: Transition.fade,

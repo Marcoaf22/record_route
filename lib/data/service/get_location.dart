@@ -1,11 +1,50 @@
 import 'dart:async';
 
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:record_route/pages/home/home_controller.dart';
 import 'package:record_route/util/toastr.dart';
+import 'package:location/location.dart' as L;
 
 class GetLocation {
   StreamSubscription<ServiceStatus>? serviceStatusStream;
   StreamSubscription<Position>? positionStream;
+
+  RxBool requestLocation = true.obs;
+  L.Location location = L.Location();
+
+  Future<bool> checkPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      requestLocation.value = true;
+    }
+
+    requestLocation.value = false;
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return false;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return false;
+    }
+    return true;
+  }
 
   Future<Position> determinePosition() async {
     bool serviceEnabled;
@@ -87,7 +126,7 @@ class GetLocation {
   }
 
   void locationListen() async {
-    const LocationSettings locationSettings = LocationSettings(
+    LocationSettings locationSettings = LocationSettings(
       accuracy: LocationAccuracy.high,
       distanceFilter: 10,
     );
@@ -114,12 +153,41 @@ class GetLocation {
   void serviceStatusListen() {
     serviceStatusStream =
         Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
-      print('Test');
+      if (status == ServiceStatus.disabled) {
+        print('show');
+        showLocation();
+      }
+      if (status == ServiceStatus.enabled) {
+        print('hide');
+        hideLocation();
+      }
       print(status);
     });
   }
 
   void serviceStatusCancel() {
     serviceStatusStream?.cancel();
+  }
+
+  void showLocation() {
+    // HomeController c = Get.find<HomeController>();
+    // c.requestLocation = true;
+    // requestLocation.toggle();
+    requestLocation.value = true;
+    print('es true: ' + requestLocation.isFalse.toString());
+    // c.update();
+  }
+
+  void hideLocation() {
+    // HomeController c = Get.find<HomeController>();
+    // c.requestLocation = false;
+    requestLocation.value = false;
+    print('es false: ' + requestLocation.isFalse.toString());
+    // c.update();
+  }
+
+  Future<void> requestLocationService() async {
+    bool test = await location.serviceEnabled();
+    print('request ' + test.toString());
   }
 }

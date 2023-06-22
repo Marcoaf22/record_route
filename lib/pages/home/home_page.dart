@@ -21,8 +21,15 @@ class HomePage extends StatelessWidget {
             child: Stack(
               children: [
                 Container(
-                  color: colors.primary,
+                  color: Colors.red,
                 ),
+                // _.requestLocation
+                //     ? Container(
+                //         width: 100.0.wp,
+                //         decoration: BoxDecoration(color: Colors.yellowAccent),
+                //         child: Text('Habilitar ubicacion'),
+                //       )
+                //     : const SizedBox.shrink(),
                 Positioned(
                   top: 7.0.hp,
                   child: Container(
@@ -30,7 +37,7 @@ class HomePage extends StatelessWidget {
                     width: 100.0.wp,
                     decoration: const BoxDecoration(
                       borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(15)),
+                          BorderRadius.vertical(top: Radius.circular(20)),
                       color: Colors.white,
                     ),
                   ),

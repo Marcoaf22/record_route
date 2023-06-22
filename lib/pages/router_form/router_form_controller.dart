@@ -6,18 +6,19 @@ import 'package:record_route/data/model/basic.dart';
 
 import 'package:record_route/data/model/router.dart';
 import 'package:record_route/data/model/user.dart';
+import 'package:record_route/data/model/user_profile.dart';
 import 'package:record_route/data/service/get_location.dart';
 
 class RouterFormController extends GetxController {
   Seeting setting = Auth.instance.getSeeting();
 
-  Basic? plant;
+  Company? plant;
 
-  List<Basic> plants = fuelPlants;
-  List<BasicSelected> stations = gasStations;
+  List<Company> plants = Auth.instance.getUser().factories;
+  List<Company> stations = Auth.instance.getUser().companies;
 
   EntityRouter entity = EntityRouter();
-  User user = Auth.instance.getUser();
+  UserProfile user = Auth.instance.getUser();
 
   RouterFormController() {
     print('🎈 Controller form');
@@ -29,7 +30,7 @@ class RouterFormController extends GetxController {
   }
 
   bool validateForm() {
-    List<BasicSelected> selecteds =
+    List<Company> selecteds =
         stations.where((element) => element.selected).toList();
     return selecteds.isEmpty;
   }

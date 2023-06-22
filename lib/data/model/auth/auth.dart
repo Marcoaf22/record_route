@@ -5,17 +5,25 @@ import 'package:record_route/data/model/auth/setting.dart';
 
 import 'package:record_route/data/model/user.dart';
 import 'package:record_route/data/provider/authentication.dart';
+import 'package:record_route/data/model/user_profile.dart';
 
 class Session {
-  Session({required this.token, this.expiresIn, this.createdAt});
+  Session({
+    required this.token,
+    this.expiresIn,
+    this.tokenType,
+    this.createdAt,
+  });
 
-  final String token;
+  String? token;
+  String? tokenType;
   String? createdAt;
   int? expiresIn;
 
   Session copyWith({
     int? branchDefault,
     String? token,
+    String? tokenType,
     bool? requestBranch,
   }) {
     return Session(token: token ?? this.token);
@@ -25,6 +33,7 @@ class Session {
     return Session(
       token: json["token"] ?? "",
       expiresIn: 86400,
+      tokenType: json["tokenType"] ?? "",
       createdAt: DateTime.now().toIso8601String(),
     );
   }
@@ -61,10 +70,10 @@ class Auth {
     return session;
   }
 
-  Future<User?> setUser(Map<String, dynamic> data) async {
+  Future<UserProfile?> setUser(Map<String, dynamic> data) async {
     print('🎄 Set user');
-    final User user = User.fromMap(data);
-    final String info = jsonEncode(user.toMap());
+    final UserProfile user = UserProfile.fromJson(data);
+    final String info = jsonEncode(user.toJson());
     _storage.write(keyInfo, info);
     _storage.save();
     return user;
@@ -88,15 +97,14 @@ class Auth {
 
   Future<void> setSeeting(Seeting seeting) async {
     final code = jsonEncode(seeting.toJson());
-    print(code);
     await _storage.write(keySeeting, code);
   }
 
-  User getUser() {
+  UserProfile getUser() {
     print('🎃 getUser');
     final value = _storage.read(keyInfo);
     final json = jsonDecode(value);
-    final user = User.fromMap(json);
+    final user = UserProfile.fromJson(json);
     return user;
   }
 
