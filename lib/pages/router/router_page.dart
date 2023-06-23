@@ -20,7 +20,7 @@ class RouterPage extends StatelessWidget {
       builder: (_) => Column(
         children: [
           Obx(() {
-            if (Get.find<GetLocation>().requestLocation.value) {
+            if (Get.find<GetLocation>().requestService.value) {
               Container(
                 width: 100.0.wp,
                 decoration: BoxDecoration(color: Colors.yellowAccent),

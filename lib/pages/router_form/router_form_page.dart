@@ -331,11 +331,20 @@ class RouterFormPage extends StatelessWidget {
                                   'Faltan datos', 'Debe seleccionar una EESS');
                               return;
                             }
-                            bool result = await _.save();
-                            ToastrService().success(
-                                title: 'Ruta',
-                                message: 'La ruta ha sido creada');
-                            Get.offAndToNamed(Routes.routerDetail);
+
+                            bool result = false;
+                            result = await _.validateServiceEnable();
+                            if (!result) {
+                              ToastrService().info(
+                                  'ERROR', 'Debe habilitar el servicio de GPS');
+                            }
+                            result = await _.save();
+                            if (result) {
+                              // ToastrService().success(
+                              //     title: 'Ruta',
+                              //     message: 'La ruta ha sido creada');
+                              // Get.offAndToNamed(Routes.routerDetail);
+                            }
                           },
                         ),
                       )

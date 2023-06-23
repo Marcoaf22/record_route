@@ -4,7 +4,10 @@ import 'package:get/get.dart';
 import 'package:record_route/core/common/services.dart';
 import 'package:record_route/core/utils/enviroments.dart';
 import 'package:record_route/data/provider/authentication.dart';
+import 'package:record_route/data/provider/request_service.dart';
 import 'package:record_route/data/service/get_location.dart';
+
+import 'database.dart';
 
 class MainBinding implements Bindings {
   late LocationSettings locationSettings;
@@ -18,8 +21,12 @@ class MainBinding implements Bindings {
     ));
 
     Get.put<Service>(Service());
+    Get.put<RequestService>(RequestService());
     Get.put<Authentication>(Authentication());
     Get.put<GetLocation>(GetLocation());
+
+    final db = DataBaseInventory();
+    db.createTable();
   }
 
   initConfig() {

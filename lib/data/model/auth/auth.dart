@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:record_route/data/model/auth/setting.dart';
-
-import 'package:record_route/data/model/user.dart';
 import 'package:record_route/data/provider/authentication.dart';
 import 'package:record_route/data/model/user_profile.dart';
+import 'package:record_route/data/service/get_location.dart';
 
 class Session {
   Session({
@@ -56,6 +56,7 @@ class Auth {
 
   final key = "SESSION";
   final keyInfo = "INFO";
+  final db = "inventory.db";
   final keySeeting = "SEETING";
 
   Future<Session> setSession(Map<String, dynamic> data) async {
@@ -129,6 +130,10 @@ class Auth {
   }
 
   Future<bool> logOut() async {
+    GetLocation service = Get.find<GetLocation>();
+    service.locationCancel();
+    service.serviceStatusCancel();
+
     await _storage.remove(key);
     await _storage.remove(keyInfo);
     return true;

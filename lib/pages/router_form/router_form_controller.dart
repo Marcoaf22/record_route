@@ -8,6 +8,7 @@ import 'package:record_route/data/model/router.dart';
 import 'package:record_route/data/model/router_create.dart';
 import 'package:record_route/data/model/user.dart';
 import 'package:record_route/data/model/user_profile.dart';
+import 'package:record_route/data/provider/request_service.dart';
 import 'package:record_route/data/service/get_location.dart';
 
 class RouterFormController extends GetxController {
@@ -22,7 +23,8 @@ class RouterFormController extends GetxController {
   List<Product> products = Auth.instance.getUser().products;
 
   UserProfile user = Auth.instance.getUser();
-  GetLocation service = Get.find<GetLocation>();
+  GetLocation locationService = Get.find<GetLocation>();
+  RequestService service = Get.find<RequestService>();
 
   RouterFormController() {
     print('🎈 Controller form');
@@ -53,18 +55,23 @@ class RouterFormController extends GetxController {
     return stations.where((element) => element.selected).toList().length;
   }
 
+  Future<bool> validateServiceEnable() async {
+    return await locationService.checkActiveService();
+  }
+
   Future<bool> save() async {
-    print('save');
-    bool result = await service.checkPermission();
+    bool result = await locationService.checkPermission();
     if (result) {
-      await 
+      prepareData();
+      final res = service.post(url: '/routes', body: entity.toJson());
+      return true;
     }
     return result;
   }
 
   initLocation() async {
-    service.serviceStatusListen();
-    service.locationListen();
+    locationService.serviceStatusListen();
+    locationService.locationListen();
   }
 
   prepareData() {
@@ -74,6 +81,7 @@ class RouterFormController extends GetxController {
         .map((e) => CompanyId(id: e.id!))
         .toList();
     entity.driverId = user.driver?.id ?? 0;
+    entity.dateStart = DateTime.now();
     entity.productoId = product?.productoId ?? 0;
   }
 

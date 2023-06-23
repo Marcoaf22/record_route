@@ -16,7 +16,6 @@ class RouterDetailController extends GetxController {
   User? user = Auth.instance.getUser().user;
 
   RouterDetailController() {
-    print('🎁 Router detail');
     stations = setting.stations;
     fuelPlant = setting.fuelPlant;
     stations.sort((a, b) => a.index - b.index);

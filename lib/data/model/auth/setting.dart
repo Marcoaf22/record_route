@@ -5,6 +5,7 @@ class Seeting {
   bool darkMode = false;
   bool onRecord = false;
   int stepIndex = -1;
+
   List<Company> stations = [];
   Company? fuelPlant;
   Seeting(

@@ -1,15 +1,15 @@
 class UserProfile {
-  UserProfile({
-    required this.user,
-    required this.driver,
-    required this.companies,
-    required this.factories,
-    required this.products,
-    required this.routes,
-    required this.routeActive,
-    required this.accessToken,
-    required this.tokenType,
-  });
+  UserProfile(
+      {required this.user,
+      required this.driver,
+      required this.companies,
+      required this.factories,
+      required this.products,
+      required this.routes,
+      required this.routeActive,
+      required this.accessToken,
+      required this.tokenType,
+      this.onRoute = false});
 
   final User? user;
   final Driver? driver;
@@ -20,32 +20,35 @@ class UserProfile {
   final Route? routeActive;
   final String? accessToken;
   final String? tokenType;
+  bool onRoute;
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
-      user: json["user"] == null ? null : User.fromJson(json["user"]),
-      driver: json["driver"] == null ? null : Driver.fromJson(json["driver"]),
-      companies: json["companies"] == null
-          ? []
-          : List<Company>.from(
-              json["companies"]!.map((x) => Company.fromJson(x))),
-      factories: json["factories"] == null
-          ? []
-          : List<Company>.from(
-              json["factories"]!.map((x) => Company.fromJson(x))),
-      products: json["products"] == null
-          ? []
-          : List<Product>.from(
-              json["products"]!.map((x) => Product.fromJson(x))),
-      routes: json["routes"] == null
-          ? []
-          : List<Route>.from(json["routes"]!.map((x) => Route.fromJson(x))),
-      routeActive: json["route_active"] == null
-          ? null
-          : Route.fromJson(json["route_active"]),
-      accessToken: json["accessToken"],
-      tokenType: json["token_type"],
-    );
+        user: json["user"] == null ? null : User.fromJson(json["user"]),
+        driver: json["driver"] == null ? null : Driver.fromJson(json["driver"]),
+        companies: json["companies"] == null
+            ? []
+            : List<Company>.from(
+                json["companies"]!.map((x) => Company.fromJson(x))),
+        factories: json["factories"] == null
+            ? []
+            : List<Company>.from(
+                json["factories"]!.map((x) => Company.fromJson(x))),
+        products: json["products"] == null
+            ? []
+            : List<Product>.from(
+                json["products"]!.map((x) => Product.fromJson(x))),
+        routes: json["routes"] == null
+            ? []
+            : List<Route>.from(json["routes"]!.map((x) => Route.fromJson(x))),
+        routeActive: json["route_active"] == null ||
+                (json["router_active"] is List &&
+                    (json["route_active"] as List).isEmpty)
+            ? null
+            : Route.fromJson(json["route_active"]),
+        accessToken: json["accessToken"],
+        tokenType: json["token_type"],
+        onRoute: json["on_route"] ?? false);
   }
 
   Map<String, dynamic> toJson() => {
@@ -58,6 +61,7 @@ class UserProfile {
         "route_active": routeActive?.toJson(),
         "accessToken": accessToken,
         "token_type": tokenType,
+        "on_route": onRoute
       };
 
   @override

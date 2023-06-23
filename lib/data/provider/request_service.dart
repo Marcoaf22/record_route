@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get/instance_manager.dart';
 import 'package:record_route/core/common/services.dart';
-import 'package:record_route/core/utils/enviroments.dart';
 import 'package:record_route/data/model/auth/auth.dart';
 import 'package:record_route/data/model/user_profile.dart';
 import 'package:record_route/util/message.dart';
@@ -9,38 +8,16 @@ import 'package:record_route/util/toastr.dart';
 
 enum Status { uninitialized, authenticated, authenticating, anauthenticated }
 
-class Authentication {
+class RequestService {
   final Dio _dio = Get.find<Dio>();
   ToastrService toastr = ToastrService();
 
   final Service service = Get.find<Service>();
 
-  Future<bool> login({String email = '', String password = ''}) async {
+  Future<bool> post({required String url, Object? body}) async {
     try {
-      _dio.options.baseUrl = enviroment['backendUrl'];
-      print(_dio.options.baseUrl);
-      final Response response = await _dio.post('/api/app/login',
-          data: {"username": email, "password": password});
-
-      UserProfile user = UserProfile.fromJson(response.data['data']);
-      Session s = Session(
-          token: response.data['data']['token'],
-          tokenType: response.data['data']['tokenType']);
-
-      if (user.routeActive != null) {
-        print(user.routeActive.toString());
-        print('on route');
-        user.onRoute = true;
-      }
-
-      await Auth.instance.setSession(s.toJson());
-      await Auth.instance.setUser(user.toJson());
-
-      _dio.options =
-          BaseOptions(baseUrl: enviroment['backendUrl'] + "/api/app", headers: {
-        'Authorization':
-            '${response.data['data']['token_type']} ${response.data['data']["accessToken"]}'
-      });
+      print(_dio.options.headers);
+      final Response response = await _dio.post(url, data: body);
 
       return true;
     } catch (e) {
@@ -48,17 +25,6 @@ class Authentication {
         onError(e.response);
       }
       return false;
-    }
-  }
-
-  Future<String?> refreshToken(id) async {
-    try {
-      print('❤ refreshToken');
-      final Response response = await _dio.post('/auth/$id/reconnect');
-      return response.data['token'];
-    } catch (e) {
-      print(e);
-      return null;
     }
   }
 

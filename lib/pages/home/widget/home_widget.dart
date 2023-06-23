@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:location/location.dart';
 import 'package:record_route/data/model/auth/auth.dart';
+import 'package:record_route/data/model/location.dart';
 import 'package:record_route/data/service/get_location.dart';
 import 'package:record_route/pages/home/home_controller.dart';
 import 'package:record_route/routes/app_pages.dart';
@@ -23,7 +24,7 @@ class HomeWidget extends StatelessWidget {
             children: [
               Obx(() {
                 GetLocation service = Get.find<GetLocation>();
-                if (service.requestLocation.value) {
+                if (service.requestService.value) {
                   return Container(
                     width: 100.0.wp,
                     decoration: BoxDecoration(color: Colors.yellowAccent),
@@ -190,7 +191,7 @@ class HomeWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Ruta #4' ?? '',
+                            _.router?.name ?? '',
                             style: TextStyle(),
                           ),
                           Text(
@@ -239,7 +240,17 @@ class HomeWidget extends StatelessWidget {
                     Auth.instance.logOut();
                     Get.offAllNamed(Routes.login);
                   },
-                  child: Text('Salir'))
+                  child: Text('Salir')),
+              TextButton(
+                  onPressed: () async {
+                    RowLocationDB db = RowLocationDB();
+                    await db.open();
+                    List<RowLocation> list = await db.getAll();
+                    list.map((e) {
+                      print(e.toString());
+                    });
+                  },
+                  child: Text('test')),
             ],
           ),
         );

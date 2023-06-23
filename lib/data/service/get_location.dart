@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:record_route/data/model/location.dart';
 import 'package:record_route/pages/home/home_controller.dart';
 import 'package:record_route/util/toastr.dart';
 import 'package:location/location.dart' as L;
@@ -11,20 +12,22 @@ class GetLocation {
   StreamSubscription<ServiceStatus>? serviceStatusStream;
   StreamSubscription<Position>? positionStream;
 
-  RxBool requestLocation = true.obs;
+  RxBool requestService = true.obs;
   L.Location location = L.Location();
 
-  Future<bool> checkPermission() async {
+  Future<bool> checkActiveService() async {
     bool serviceEnabled;
-    LocationPermission permission;
-
-    // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      requestLocation.value = true;
+      requestService.value = true;
+      return false;
     }
+    requestService.value = false;
+    return true;
+  }
 
-    requestLocation.value = false;
+  Future<bool> checkPermission() async {
+    LocationPermission permission;
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
@@ -134,12 +137,23 @@ class GetLocation {
     bool result = await validatePermissions();
     if (!result) return;
 
+    RowLocationDB db = new RowLocationDB();
+    await db.open();
     positionStream =
         Geolocator.getPositionStream(locationSettings: locationSettings).listen(
             (Position? position) {
       print(position == null
           ? 'Unknown'
           : '${position.latitude.toString()}, ${position.longitude.toString()}');
+      if (position != null) {
+        print('test');
+        db.insert(RowLocation(
+            id: -1,
+            latitude: position.latitude.toString(),
+            longitude: position.longitude.toString(),
+            routeId: 7,
+            dateTime: DateTime.now()));
+      }
     }, onError: (Object error) {
       print(error);
       print('erron');
@@ -173,16 +187,16 @@ class GetLocation {
     // HomeController c = Get.find<HomeController>();
     // c.requestLocation = true;
     // requestLocation.toggle();
-    requestLocation.value = true;
-    print('es true: ' + requestLocation.isFalse.toString());
+    requestService.value = true;
+    print('es true: ' + requestService.isFalse.toString());
     // c.update();
   }
 
   void hideLocation() {
     // HomeController c = Get.find<HomeController>();
     // c.requestLocation = false;
-    requestLocation.value = false;
-    print('es false: ' + requestLocation.isFalse.toString());
+    requestService.value = false;
+    print('es false: ' + requestService.isFalse.toString());
     // c.update();
   }
 

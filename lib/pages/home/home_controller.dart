@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as W;
 import 'package:get/get.dart';
 import 'package:record_route/data/model/auth/auth.dart';
 import 'package:record_route/data/model/user_profile.dart';
 import 'package:record_route/data/service/get_location.dart';
 import 'package:record_route/pages/home/widget/home_widget.dart';
 import 'package:record_route/data/model/auth/setting.dart';
-
 import 'package:record_route/pages/router/router_page.dart';
 import 'package:record_route/routes/app_pages.dart';
 
@@ -15,7 +14,7 @@ class HomeController extends GetxController {
   Rx<RequestState> staterequest = RequestState.initial.obs;
   bool requestLocation = false;
 
-  List<Widget> listPage = [
+  List<W.Widget> listPage = [
     HomeWidget(),
     const RouterPage(),
   ];
@@ -26,6 +25,7 @@ class HomeController extends GetxController {
   User? user = Auth.instance.getUser().user;
 
   Seeting setting = Auth.instance.getSeeting();
+  Route? router;
 
   HomeController();
 
@@ -33,18 +33,22 @@ class HomeController extends GetxController {
 
   @override
   void onInit() async {
-    print('❤ onInit - HomeController');
     super.onInit();
-    // FlutterNativeSplash.remove();
+    router = userProfile.routeActive;
   }
 
   @override
   void onReady() async {
     super.onReady();
-    print('❤ onReady - HomeController');
     GetLocation service = Get.find<GetLocation>();
     service.serviceStatusListen();
     service.checkPermission();
+
+    if (userProfile.onRoute) {
+      service.locationListen();
+    }
+    setting.onRecord = userProfile.onRoute;
+    Auth.instance.setSeeting(setting);
     update(['homeWidget']);
   }
 
