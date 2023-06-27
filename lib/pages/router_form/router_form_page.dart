@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:record_route/data/model/basic.dart';
 import 'package:record_route/data/model/user_profile.dart';
+import 'package:record_route/pages/home/home_controller.dart';
 
 import 'package:record_route/pages/router_form/router_form_controller.dart';
 import 'package:record_route/routes/app_pages.dart';
@@ -19,7 +20,7 @@ class RouterFormPage extends StatelessWidget {
       init: RouterFormController(),
       builder: (_) => SafeArea(
         child: Scaffold(
-          appBar: AppBar(title: Text("Nueva Ruta")),
+          appBar: AppBar(title: const Text("Nueva Ruta")),
           body: SafeArea(
             child: Column(
               children: [
@@ -114,7 +115,7 @@ class RouterFormPage extends StatelessWidget {
                                 Icons.arrow_forward_ios_outlined,
                               ),
                               iconSize: 14,
-                              iconEnabledColor: Colors.yellow,
+                              iconEnabledColor: Colors.black,
                               iconDisabledColor: Colors.grey,
                             ),
                             dropdownStyleData: DropdownStyleData(
@@ -154,7 +155,7 @@ class RouterFormPage extends StatelessWidget {
                                 Icon(
                                   Icons.list,
                                   size: 16,
-                                  color: Colors.yellow,
+                                  color: Colors.black,
                                 ),
                                 SizedBox(
                                   width: 4,
@@ -189,7 +190,6 @@ class RouterFormPage extends StatelessWidget {
                             value: _.plant,
                             onChanged: (value) {
                               if (value != null) {
-                                print(value.name);
                                 _.plant = value;
                                 _.update();
                               }
@@ -213,7 +213,7 @@ class RouterFormPage extends StatelessWidget {
                                 Icons.arrow_forward_ios_outlined,
                               ),
                               iconSize: 14,
-                              iconEnabledColor: Colors.yellow,
+                              iconEnabledColor: Colors.black,
                               iconDisabledColor: Colors.grey,
                             ),
                             dropdownStyleData: DropdownStyleData(
@@ -340,10 +340,13 @@ class RouterFormPage extends StatelessWidget {
                             }
                             result = await _.save();
                             if (result) {
-                              // ToastrService().success(
-                              //     title: 'Ruta',
-                              //     message: 'La ruta ha sido creada');
-                              // Get.offAndToNamed(Routes.routerDetail);
+                              HomeController home = Get.find<HomeController>();
+                              home.updateSetting();
+
+                              ToastrService().success(
+                                  title: 'Ruta',
+                                  message: 'La ruta ha sido creada');
+                              Get.offAndToNamed(Routes.routerDetail);
                             }
                           },
                         ),

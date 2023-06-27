@@ -3,14 +3,13 @@ import 'package:get/get.dart';
 import 'package:record_route/data/service/get_location.dart';
 
 import 'package:record_route/pages/router/router_controller.dart';
-// import 'package:record_route/data/model/router.dart' as Model;
 import 'package:record_route/routes/app_pages.dart';
-import 'package:record_route/util/dialogs.dart';
 import 'package:record_route/util/percent_width_height.dart';
 import 'package:record_route/data/model/user_profile.dart' as Models;
+//import 'package:location/location.dart';
 
 class RouterPage extends StatelessWidget {
-  const RouterPage({super.key});
+  const RouterPage({ super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +19,28 @@ class RouterPage extends StatelessWidget {
       builder: (_) => Column(
         children: [
           Obx(() {
-            if (Get.find<GetLocation>().requestService.value) {
-              Container(
+            GetLocation service = Get.find<GetLocation>();
+            if (service.requestService.value) {
+              return Container(
                 width: 100.0.wp,
-                decoration: BoxDecoration(color: Colors.yellowAccent),
-                child: Text('Habilitar ubicacion'),
+                decoration: const BoxDecoration(color: Colors.yellowAccent),
+                child: Row(
+                  children: [
+                    const Text('La ubicacion no esta habilitada'),
+                    TextButton(
+                      onPressed: () async {
+                       // Location location = new Location();
+                       // bool isEnable = await location.serviceEnabled();
+                       // if (!isEnable) {
+                       //   bool result = await location.requestService();
+                       //   service.hideLocation();
+                       // }
+                        // service.requestLocationService();
+                      },
+                      child: const Text('Activar GPS'),
+                    ),
+                  ],
+                ),
               );
             }
             return Container();
@@ -35,7 +51,7 @@ class RouterPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(top: 1.5.hp, left: 30),
                 child: Text(
-                  _.getCompany(),
+                  'PRUEBA',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: colors.onPrimary,
@@ -107,31 +123,35 @@ class RouterPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              router.name ?? '',
-                              style: TextStyle(),
+                              router.name,
+                              style: const TextStyle(),
                             ),
                             Text(
-                              "Hora Inicio: 12 AM",
-                              style:
-                                  TextStyle(fontSize: 11, fontFamily: 'Roboco'),
+                              "Hora Inicio: ${router.getDateStart()}",
+                              style: const TextStyle(
+                                  fontSize: 11, fontFamily: 'Roboco'),
                             ),
                             Text(
-                              "Hora Fin: 3 AM",
-                              style:
-                                  TextStyle(fontSize: 11, fontFamily: 'Roboco'),
+                              "Hora Fin: ${router.getDateFinish()}",
+                              style: const TextStyle(
+                                  fontSize: 11, fontFamily: 'Roboco'),
                             ),
                           ],
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Padding(
                         padding: const EdgeInsets.only(right: 15),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "2 Hr.",
-                              style: TextStyle(fontSize: 13),
+                              router.diffInHour(),
+                              style: const TextStyle(fontSize: 13),
+                            ),
+                            Text(
+                              router.status,
+                              style: const TextStyle(fontSize: 13),
                             ),
                           ],
                         ),

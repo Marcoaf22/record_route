@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+//import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:record_route/data/model/auth/auth.dart';
 import 'package:record_route/data/provider/authentication.dart';
@@ -14,8 +14,7 @@ class LoginController extends GetxController {
 
   @override
   void onInit() {
-    print('😎 onInit - LoginController');
-    FlutterNativeSplash.remove();
+   // FlutterNativeSplash.remove();
     super.onInit();
   }
 
@@ -24,7 +23,6 @@ class LoginController extends GetxController {
     state(LoginState.loading);
     bool isOk = await auth.login(email: email, password: password);
     state(LoginState.initial);
-    Auth.instance.setSeeting(Seeting(darkMode: true));
     return isOk;
   }
 }

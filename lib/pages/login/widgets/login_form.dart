@@ -48,6 +48,7 @@ class _LoginFormState extends State<LoginForm> {
                 },
               ),
               Container(
+                margin: EdgeInsets.symmetric(vertical: 0.9.dp),
                 decoration: const BoxDecoration(
                     border: Border(
                         bottom: BorderSide(
@@ -104,7 +105,7 @@ class _LoginFormState extends State<LoginForm> {
                 ),
               ),
               SizedBox(
-                height: 3.0.dp,
+                height: 8.0.dp,
               ),
             ],
           ),
@@ -115,7 +116,6 @@ class _LoginFormState extends State<LoginForm> {
 
   _submit() async {
     final isOk = _formKey.currentState?.validate();
-    // final isOk = true;
     if (isOk != null && isOk) {
       FocusScope.of(context).unfocus();
       LoginController c = Get.find<LoginController>();

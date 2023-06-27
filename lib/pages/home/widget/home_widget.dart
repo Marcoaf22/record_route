@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:location/location.dart';
+//import 'package:location/location.dart';
 import 'package:record_route/data/model/auth/auth.dart';
-import 'package:record_route/data/model/location.dart';
 import 'package:record_route/data/service/get_location.dart';
 import 'package:record_route/pages/home/home_controller.dart';
+import 'package:record_route/pages/router_form/widget/button_option.dart';
+import 'package:record_route/pages/widgets/button_background.dart';
 import 'package:record_route/routes/app_pages.dart';
 import 'package:record_route/util/percent_width_height.dart';
 import 'package:record_route/util/toastr.dart';
@@ -27,21 +28,21 @@ class HomeWidget extends StatelessWidget {
                 if (service.requestService.value) {
                   return Container(
                     width: 100.0.wp,
-                    decoration: BoxDecoration(color: Colors.yellowAccent),
+                    decoration: const BoxDecoration(color: Colors.yellowAccent),
                     child: Row(
                       children: [
-                        Text('La ubicacion no esta habilitada'),
+                        const Text('La ubicacion no esta habilitada'),
                         TextButton(
                           onPressed: () async {
-                            Location location = new Location();
-                            bool isEnable = await location.serviceEnabled();
-                            if (!isEnable) {
-                              bool result = await location.requestService();
-                              service.hideLocation();
-                            }
+                            //        Location location = Location();
+                            //  bool isEnable = await location.serviceEnabled();
+                            //if (!isEnable) {
+                            //    bool result = await location.requestService();
+                            service.hideLocation();
+                            //}
                             // service.requestLocationService();
                           },
-                          child: Text('Activar GPS'),
+                          child: const Text('Activar GPS'),
                         ),
                       ],
                     ),
@@ -55,7 +56,7 @@ class HomeWidget extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(top: 1.5.hp, left: 30),
                     child: Text(
-                      _.getCompany(),
+                      'Cones',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: colors.onPrimary,
@@ -70,26 +71,24 @@ class HomeWidget extends StatelessWidget {
               ClipRRect(
                   borderRadius: BorderRadius.circular(35.0.wp / 2),
                   child: GetBuilder<HomeController>(builder: (_) {
-                    String? path = _.user?.avatar;
+                    String? path = _.userProfile.user?.avatar;
                     if (path == null || path.isEmpty) {
-                      print("path asset ${path}");
                       return Container(
-                        height: 35.0.wp,
-                        width: 35.0.wp,
+                        height: 45.0.wp,
+                        width: 45.0.wp,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             colorFilter: ColorFilter.mode(
-                                Colors.black.withOpacity(0.6),
-                                BlendMode.dstATop),
-                            image:
-                                const AssetImage("assets/users/user_male.png"),
+                              Colors.black.withOpacity(1),
+                              BlendMode.dstATop,
+                            ),
+                            image: const AssetImage(
+                                "assets/users/user_default.png"),
                             fit: BoxFit.cover,
                           ),
                         ),
                       );
                     }
-                    print("path network ${path}");
-
                     return Image.network(
                       path,
                       width: 35.0.wp,
@@ -101,15 +100,17 @@ class HomeWidget extends StatelessWidget {
                         decoration: BoxDecoration(
                           boxShadow: const [
                             BoxShadow(
-                                color: Colors.black,
-                                blurRadius: 10.0,
-                                spreadRadius: 10.0)
+                              color: Colors.white,
+                              blurRadius: 10.0,
+                              spreadRadius: 10.0,
+                            )
                           ],
                           image: DecorationImage(
                             colorFilter: ColorFilter.mode(
                                 Colors.black.withOpacity(0.6),
                                 BlendMode.dstATop),
-                            image: AssetImage(path),
+                            image: const AssetImage(
+                                'assets/users/user_default.png'),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -123,7 +124,7 @@ class HomeWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 15),
+                    padding: const EdgeInsets.only(left: 15, top: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -135,8 +136,10 @@ class HomeWidget extends StatelessWidget {
                               fontStyle: FontStyle.normal),
                         ),
                         Text(
-                          _.user?.name ?? '',
-                          style: TextStyle(fontSize: 15, fontFamily: 'Kanit'),
+                          "${_.userProfile.user?.name} ${_.userProfile.driver?.lastName}" ??
+                              '',
+                          style: const TextStyle(
+                              fontSize: 15, fontFamily: 'Kanit'),
                         ),
                         const Text(
                           'Email',
@@ -146,8 +149,9 @@ class HomeWidget extends StatelessWidget {
                               fontStyle: FontStyle.normal),
                         ),
                         Text(
-                          _.user?.email ?? '',
-                          style: TextStyle(fontSize: 15, fontFamily: 'Kanit'),
+                          _.userProfile.user?.email ?? '',
+                          style: const TextStyle(
+                              fontSize: 15, fontFamily: 'Kanit'),
                         ),
                         const Text(
                           'Telefono',
@@ -157,8 +161,21 @@ class HomeWidget extends StatelessWidget {
                               fontStyle: FontStyle.normal),
                         ),
                         Text(
-                          _.user?.phone ?? '',
-                          style: TextStyle(fontSize: 15, fontFamily: 'Kanit'),
+                          _.userProfile.user?.phone ?? '',
+                          style: const TextStyle(
+                              fontSize: 15, fontFamily: 'Kanit'),
+                        ),
+                        const Text(
+                          'Cedula de Identidad',
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'Kanit',
+                              fontStyle: FontStyle.normal),
+                        ),
+                        Text(
+                          "${_.userProfile.driver?.identityCard} ${_.userProfile.driver?.identityCardExt}",
+                          style: const TextStyle(
+                              fontSize: 15, fontFamily: 'Kanit'),
                         ),
                       ],
                     ),
@@ -166,91 +183,103 @@ class HomeWidget extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 5.0.hp),
-              Text(_.setting.onRecord ? 'Ruta en progreso' : 'Ultima ruta'),
-              Container(
-                width: 90.0.wp,
-                height: 8.0.hp,
-                margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 7),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.white,
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.black26,
-                        spreadRadius: 2.0,
-                        blurRadius: 1.0),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _.router?.name ?? '',
-                            style: TextStyle(),
-                          ),
-                          Text(
-                            "Hora Inicio:12:23 AM",
-                            style:
-                                TextStyle(fontSize: 11, fontFamily: 'Roboco'),
-                          ),
-                          Text(
-                            "Hora Fin:16:35 AM",
-                            style:
-                                TextStyle(fontSize: 11, fontFamily: 'Roboco'),
-                          ),
+              _.userProfile.routes.isEmpty
+                  ? Container()
+                  : Text(
+                      _.setting.onRecord ? 'Ruta en progreso' : 'Ultima ruta'),
+              _.userProfile.routes.isEmpty
+                  ? SizedBox(
+                      height: 10.0.hp,
+                    )
+                  : Container(
+                      width: 90.0.wp,
+                      height: 8.0.hp,
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 7),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.white,
+                        boxShadow: const [
+                          BoxShadow(
+                              color: Colors.black26,
+                              spreadRadius: 2.0,
+                              blurRadius: 1.0),
                         ],
                       ),
-                    ),
-                    Spacer(),
-                    Padding(
-                      padding: EdgeInsets.only(right: 15),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _.setting.onRecord
-                              ? TextButton(
-                                  style: TextButton.styleFrom(
-                                      backgroundColor: Colors.cyan),
-                                  onPressed: () async {
-                                    await Get.toNamed(Routes.routerDetail);
-                                    _.updateSetting();
-                                  },
-                                  child: Text(
-                                    'Ir',
-                                    style: TextStyle(color: Colors.white),
-                                  ))
-                              : Text(
-                                  "3:23 Hr.",
-                                  style: TextStyle(fontSize: 13),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _.router?.name ?? '',
+                                  style: const TextStyle(),
                                 ),
+                                Text(
+                                  "Hora Inicio: ${_.router?.getDateStart()}",
+                                  style: const TextStyle(
+                                      fontSize: 11, fontFamily: 'Roboco'),
+                                ),
+                                Text(
+                                  "Hora Fin: ${_.router?.getDateFinish()}",
+                                  style: const TextStyle(
+                                      fontSize: 11, fontFamily: 'Roboco'),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Spacer(),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 15),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                _.setting.onRecord
+                                    ? TextButton(
+                                        style: TextButton.styleFrom(
+                                            backgroundColor: Colors.cyan),
+                                        onPressed: () async {
+                                          await Get.toNamed(
+                                              Routes.routerDetail);
+                                          _.updateSetting();
+                                        },
+                                        child: const Text(
+                                          'Ir',
+                                          style: TextStyle(color: Colors.white),
+                                        ))
+                                    : Text(
+                                        _.router?.diffInHour() ?? '',
+                                        style: const TextStyle(fontSize: 13),
+                                      ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-              TextButton(
-                  onPressed: () {
-                    Auth.instance.logOut();
-                    Get.offAllNamed(Routes.login);
-                  },
-                  child: Text('Salir')),
-              TextButton(
-                  onPressed: () async {
-                    RowLocationDB db = RowLocationDB();
-                    await db.open();
-                    List<RowLocation> list = await db.getAll();
-                    list.map((e) {
-                      print(e.toString());
-                    });
-                  },
-                  child: Text('test')),
+              ButtonBackground(
+                onPressed: () {
+                  Auth.instance.logOut();
+                  Get.offAllNamed(Routes.login);
+                },
+                background: Colors.red,
+                color: Colors.white,
+                label: 'Salir',
+                fontSize: 1.8.dp,
+              )
+              // TextButton(
+              //   onPressed: () async {
+              //     _.setting.stepIndex = 1;
+              //     Auth.instance.setSeeting(_.setting);
+              //     RowLocationDB db = RowLocationDB();
+              //     await db.open();
+              //   },
+              //   child: const Text('test'),
+              // ),
             ],
           ),
         );

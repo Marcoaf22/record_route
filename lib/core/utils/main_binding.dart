@@ -17,7 +17,7 @@ class MainBinding implements Bindings {
     print('🎄 ManiBinding - inint');
 
     Get.put<Dio>(Dio(
-      BaseOptions(baseUrl: enviroment['backendUrl']),
+      BaseOptions(baseUrl: enviroment['backendUrl'] + '/api/app'),
     ));
 
     Get.put<Service>(Service());

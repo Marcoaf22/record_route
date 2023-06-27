@@ -13,7 +13,7 @@ class RouterController extends GetxController {
   Seeting setting = Auth.instance.getSeeting();
 
   UserProfile userProfile = Auth.instance.getUser();
-  User? user = Auth.instance.getUser().user;
+  // User? user = Auth.instance.getUser().user;
 
   List<Basic> startLocations = [];
   List<Basic> location = [];
@@ -27,16 +27,18 @@ class RouterController extends GetxController {
   }
 
   String getCompany() {
-    Company? a = userProfile.companies
-        .firstWhereOrNull((element) => element.id == user?.companyId);
+    Company? a = userProfile.companies.firstWhereOrNull(
+        (element) => element.id == userProfile.user?.companyId);
     if (a == null) {
       return "";
     }
-    return a.name ?? "";
+    return a.name;
   }
 
   updateSetting() {
     setting = Auth.instance.getSeeting();
+    userProfile = Auth.instance.getUser();
+    routes = userProfile.routes;
     update();
   }
 }

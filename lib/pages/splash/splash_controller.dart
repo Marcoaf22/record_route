@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter/cupertino.dart';
+//import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 
 import 'package:record_route/core/utils/enviroments.dart';
@@ -11,20 +12,20 @@ class SplashController extends GetxController {
 
   @override
   void onReady() async {
-    super.onReady();
-    FlutterNativeSplash.remove();
     print('🚩 onReady - SplashController');
+    super.onReady();
     check();
   }
 
   void check() async {
-    print('🎀 Splash - Check');
-    await Auth.instance.logOut();
+    print('check flute100r');
     String? token = await Auth.instance.getToken();
+    print(token);
+
     if (token != null) {
       final dio = Get.find<Dio>();
       dio.options = BaseOptions(
-        baseUrl: enviroment['backendUrl'],
+        baseUrl: enviroment['backendUrl'] + '/api/app',
         headers: {'Authorization': 'Bearer $token'},
       );
       Get.offNamedUntil(Routes.home, (route) => false);

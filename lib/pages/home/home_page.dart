@@ -48,8 +48,8 @@ class HomePage extends StatelessWidget {
                     child: Transform.rotate(
                       angle: math.pi / 5,
                       child: Container(
-                        height: 30.0.hp,
-                        width: 190.0.wp,
+                        height: 27.0.hp,
+                        width: 210.0.wp,
                         decoration: const BoxDecoration(
                           borderRadius:
                               BorderRadius.vertical(top: Radius.circular(15)),
@@ -123,13 +123,6 @@ class _CustomNavigationBar extends StatelessWidget {
                 icon: const Icon(FontAwesomeIcons.route),
                 color: index == 1 ? colors.onPrimary : Colors.grey,
               ),
-              // IconButton(
-              //   onPressed: () {
-              //     onPressed(2);
-              //   },
-              //   icon: const Icon(FontAwesomeIcons.userDoctor),
-              //   color: index == 2 ? colors.onPrimary : colors.secondary,
-              // ),
             ],
           ),
         ),

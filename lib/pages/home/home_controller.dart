@@ -22,19 +22,29 @@ class HomeController extends GetxController {
   int indexSelected = 0;
 
   UserProfile userProfile = Auth.instance.getUser();
-  User? user = Auth.instance.getUser().user;
+  // User? user = Auth.instance.getUser().user;
 
   Seeting setting = Auth.instance.getSeeting();
   Route? router;
 
   HomeController();
 
-  set patientcode(int patientcode) {}
-
   @override
   void onInit() async {
     super.onInit();
-    router = userProfile.routeActive;
+
+    checkOnRoute();
+  }
+
+  checkOnRoute() {
+    if (userProfile.routeActive != null) {
+      router = userProfile.routeActive;
+      userProfile.onRoute = true;
+    } else {
+      userProfile.onRoute = false;
+      router = userProfile.routes.last;
+    }
+    setting.onRecord = userProfile.onRoute;
   }
 
   @override
@@ -43,18 +53,18 @@ class HomeController extends GetxController {
     GetLocation service = Get.find<GetLocation>();
     service.serviceStatusListen();
     service.checkPermission();
+    service.checkActiveService();
 
-    if (userProfile.onRoute) {
-      service.locationListen();
-    }
-    setting.onRecord = userProfile.onRoute;
     Auth.instance.setSeeting(setting);
+
     update(['homeWidget']);
   }
 
+  isOnRoute() {}
+
   String getCompany() {
-    Company? a = userProfile.companies
-        .firstWhereOrNull((element) => element.id == user?.companyId);
+    Company? a = userProfile.companies.firstWhereOrNull(
+        (element) => element.id == userProfile.user?.companyId);
     if (a == null) {
       return "";
     }
@@ -69,9 +79,13 @@ class HomeController extends GetxController {
 
   void updateSetting() {
     setting = Auth.instance.getSeeting();
-    // Future.delayed(Duration(seconds: 1), () {
+    userProfile = Auth.instance.getUser();
+    if (userProfile.routeActive != null) {
+      router = userProfile.routeActive;
+    } else {
+      router = userProfile.routes.last;
+    }
     update(['homeWidget']);
-    // });
   }
 
   void logOut() {

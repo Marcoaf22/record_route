@@ -1,39 +1,44 @@
 import 'package:dio/dio.dart';
 import 'package:get/instance_manager.dart';
+
 import 'package:record_route/core/common/services.dart';
 import 'package:record_route/core/utils/enviroments.dart';
 import 'package:record_route/data/model/auth/auth.dart';
+import 'package:record_route/data/model/auth/setting.dart';
 import 'package:record_route/data/model/user_profile.dart';
 import 'package:record_route/util/message.dart';
 import 'package:record_route/util/toastr.dart';
+import '../model/auth/session.dart';
 
 enum Status { uninitialized, authenticated, authenticating, anauthenticated }
 
 class Authentication {
   final Dio _dio = Get.find<Dio>();
   ToastrService toastr = ToastrService();
-
   final Service service = Get.find<Service>();
 
   Future<bool> login({String email = '', String password = ''}) async {
     try {
       _dio.options.baseUrl = enviroment['backendUrl'];
-      print(_dio.options.baseUrl);
       final Response response = await _dio.post('/api/app/login',
           data: {"username": email, "password": password});
 
       UserProfile user = UserProfile.fromJson(response.data['data']);
-      Session s = Session(
-          token: response.data['data']['token'],
-          tokenType: response.data['data']['tokenType']);
+      Session session = Session(
+          token: response.data['data']['accessToken'],
+          createdAt: DateTime.now().toString(),
+          tokenType: response.data['data']['token_type']);
 
       if (user.routeActive != null) {
-        print(user.routeActive.toString());
-        print('on route');
         user.onRoute = true;
+        int stepIndex = user.routeActive!.locations
+            .indexWhere((element) => element.status == 0);
+        Seeting setting = Auth.instance.getSeeting();
+        setting.stepIndex = stepIndex == -1 ? 1 : stepIndex + 1;
+        Auth.instance.setSeeting(setting);
       }
 
-      await Auth.instance.setSession(s.toJson());
+      await Auth.instance.setSession(session);
       await Auth.instance.setUser(user.toJson());
 
       _dio.options =
@@ -44,7 +49,9 @@ class Authentication {
 
       return true;
     } catch (e) {
+      print(e);
       if (e is DioError) {
+        print(e.response.toString());
         onError(e.response);
       }
       return false;
@@ -63,6 +70,7 @@ class Authentication {
   }
 
   void onError(response) {
+    print(response.data);
     // if (response.statusCode == 401) {
     //   toastr.info('Error', ToastMessage.sessionOut);
     //   Get.offAllNamed('login');

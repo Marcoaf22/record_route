@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get/instance_manager.dart';
 import 'package:record_route/core/common/services.dart';
-import 'package:record_route/data/model/auth/auth.dart';
 import 'package:record_route/data/model/user_profile.dart';
 import 'package:record_route/util/message.dart';
 import 'package:record_route/util/toastr.dart';
@@ -11,14 +10,49 @@ enum Status { uninitialized, authenticated, authenticating, anauthenticated }
 class RequestService {
   final Dio _dio = Get.find<Dio>();
   ToastrService toastr = ToastrService();
-
   final Service service = Get.find<Service>();
+
+  Future<Route?> getRoute({required int id}) async {
+    try {
+      final Response response = await _dio.get('/routes/$id');
+      Route route = Route.fromJson(response.data['data']);
+      return route;
+    } catch (e) {
+      if (e is DioError) {
+        onError(e.response);
+      }
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>?> createRoute(
+      {required String url, Object? body}) async {
+    try {
+      final Response response = await _dio.post(url, data: body);
+      return response.data['data'];
+    } catch (e) {
+      if (e is DioError) {
+        onError(e.response);
+      }
+      return null;
+    }
+  }
 
   Future<bool> post({required String url, Object? body}) async {
     try {
-      print(_dio.options.headers);
       final Response response = await _dio.post(url, data: body);
+      return true;
+    } catch (e) {
+      if (e is DioError) {
+        onError(e.response);
+      }
+      return false;
+    }
+  }
 
+  Future<bool> put({required String url, Object? body}) async {
+    try {
+      final Response response = await _dio.put(url, data: body);
       return true;
     } catch (e) {
       if (e is DioError) {

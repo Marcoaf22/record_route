@@ -27,7 +27,6 @@ class RouterFormController extends GetxController {
   RequestService service = Get.find<RequestService>();
 
   RouterFormController() {
-    print('🎈 Controller form');
     stations = stations.map((e) {
       e.index = 0;
       e.selected = false;
@@ -63,15 +62,26 @@ class RouterFormController extends GetxController {
     bool result = await locationService.checkPermission();
     if (result) {
       prepareData();
-      final res = service.post(url: '/routes', body: entity.toJson());
-      return true;
+      Map<String, dynamic>? res =
+          await service.createRoute(url: '/routes', body: entity.toJson());
+      if (res != null) {
+        Route route = Route.fromJson(res);
+        user.routes.add(route);
+        user.routeActive = route;
+        user.onRoute = true;
+        setting.onRecord = true;
+        Auth.instance.setUser(user.toJson());
+        create();
+        return true;
+      }
     }
-    return result;
+    return false;
   }
 
   initLocation() async {
     locationService.serviceStatusListen();
     locationService.locationListen();
+    locationService.initSendLocation();
   }
 
   prepareData() {

@@ -1,15 +1,16 @@
+import 'package:intl/intl.dart';
+
 class UserProfile {
-  UserProfile(
-      {required this.user,
-      required this.driver,
-      required this.companies,
-      required this.factories,
-      required this.products,
-      required this.routes,
-      required this.routeActive,
-      required this.accessToken,
-      required this.tokenType,
-      this.onRoute = false});
+  UserProfile({
+    required this.user,
+    required this.driver,
+    required this.companies,
+    required this.factories,
+    required this.products,
+    required this.routes,
+    required this.routeActive,
+    this.onRoute = false,
+  });
 
   final User? user;
   final Driver? driver;
@@ -17,10 +18,8 @@ class UserProfile {
   final List<Company> factories;
   final List<Product> products;
   final List<Route> routes;
-  final Route? routeActive;
-  final String? accessToken;
-  final String? tokenType;
-  bool onRoute;
+  Route? routeActive;
+  bool onRoute = false;
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
@@ -41,13 +40,9 @@ class UserProfile {
         routes: json["routes"] == null
             ? []
             : List<Route>.from(json["routes"]!.map((x) => Route.fromJson(x))),
-        routeActive: json["route_active"] == null ||
-                (json["router_active"] is List &&
-                    (json["route_active"] as List).isEmpty)
+        routeActive: json["route_active"] == null
             ? null
             : Route.fromJson(json["route_active"]),
-        accessToken: json["accessToken"],
-        tokenType: json["token_type"],
         onRoute: json["on_route"] ?? false);
   }
 
@@ -59,44 +54,43 @@ class UserProfile {
         "products": products.map((x) => x?.toJson()).toList(),
         "routes": routes.map((x) => x?.toJson()).toList(),
         "route_active": routeActive?.toJson(),
-        "accessToken": accessToken,
-        "token_type": tokenType,
         "on_route": onRoute
       };
 
   @override
   String toString() {
-    return "$user, $driver, $companies, $factories, $products, $routes, $routeActive, $accessToken, $tokenType, ";
+    return "$user, $driver, $companies, $factories, $products, $routes, $routeActive, ";
   }
 }
 
 class Company {
-  Company({
-    required this.id,
-    required this.name,
-    required this.nit,
-    required this.address,
-    required this.email,
-    required this.phone,
-  });
+  Company(
+      {required this.id,
+      required this.name,
+      required this.nit,
+      required this.address,
+      required this.email,
+      required this.phone,
+      this.selected = false,
+      this.index = -1});
 
-  final int? id;
-  final String? name;
-  final String? nit;
-  final String? address;
-  final String? email;
-  final String? phone;
-  int index = -1;
+  final int id;
+  final String name;
+  final String nit;
+  final String address;
+  final String email;
+  final String phone;
   bool selected = false;
+  int index = -1;
 
   factory Company.fromJson(Map<String, dynamic> json) {
     return Company(
-      id: json["id"],
-      name: json["name"],
-      nit: json["nit"],
-      address: json["address"],
-      email: json["email"],
-      phone: json["phone"],
+      id: json["id"] ?? 0,
+      name: json["name"] ?? "",
+      nit: json["nit"] ?? "",
+      address: json["address"] ?? "",
+      email: json["email"] ?? "",
+      phone: json["phone"] ?? "",
     );
   }
 
@@ -131,34 +125,34 @@ class Driver {
     required this.truckCapacity,
   });
 
-  final int? id;
-  final String? name;
-  final String? lastName;
+  final int id;
+  final String name;
+  final String lastName;
   final DateTime? birthDate;
-  final String? identityCard;
-  final String? identityCardExt;
-  final String? driverLicense;
-  final String? driverLicenseCategory;
+  final String identityCard;
+  final String identityCardExt;
+  final String driverLicense;
+  final String driverLicenseCategory;
   final DateTime? driverLicenseExpiration;
-  final String? truckIdentity;
-  final String? truckDescription;
-  final String? truckCapacity;
+  final String truckIdentity;
+  final String truckDescription;
+  final String truckCapacity;
 
   factory Driver.fromJson(Map<String, dynamic> json) {
     return Driver(
-      id: json["id"],
-      name: json["name"],
-      lastName: json["last_name"],
+      id: json["id"] ?? 0,
+      name: json["name"] ?? "",
+      lastName: json["last_name"] ?? "",
       birthDate: DateTime.tryParse(json["birth_date"] ?? ""),
-      identityCard: json["identity_card"],
-      identityCardExt: json["identity_card_ext"],
-      driverLicense: json["driver_license"],
-      driverLicenseCategory: json["driver_license_category"],
+      identityCard: json["identity_card"] ?? "",
+      identityCardExt: json["identity_card_ext"] ?? "",
+      driverLicense: json["driver_license"] ?? "",
+      driverLicenseCategory: json["driver_license_category"] ?? "",
       driverLicenseExpiration:
           DateTime.tryParse(json["driver_license_expiration"] ?? ""),
-      truckIdentity: json["truck_identity"],
-      truckDescription: json["truck_description"],
-      truckCapacity: json["truck_capacity"],
+      truckIdentity: json["truck_identity"] ?? "",
+      truckDescription: json["truck_description"] ?? "",
+      truckCapacity: json["truck_capacity"] ?? "",
     );
   }
 
@@ -192,19 +186,19 @@ class Product {
     required this.color,
   });
 
-  final int? productoId;
-  final String? description;
-  final String? descriptionShort;
-  final String? measureUnit;
-  final String? color;
+  final int productoId;
+  final String description;
+  final String descriptionShort;
+  final String measureUnit;
+  final String color;
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-      productoId: json["producto_id"],
-      description: json["description"],
-      descriptionShort: json["description_short"],
-      measureUnit: json["measure_unit"],
-      color: json["color"],
+      productoId: json["producto_id"] ?? 0,
+      description: json["description"] ?? "",
+      descriptionShort: json["description_short"] ?? "",
+      measureUnit: json["measure_unit"] ?? "",
+      color: json["color"] ?? "",
     );
   }
 
@@ -226,38 +220,68 @@ class Route {
   Route({
     required this.id,
     required this.name,
+    required this.truckName,
     required this.truckIdentity,
     required this.truckDescription,
     required this.status,
     required this.dateStart,
     required this.dateFinish,
+    required this.productoId,
     required this.product,
     required this.quantity,
     required this.locations,
   });
 
-  final int? id;
-  final String? name;
-  final String? truckIdentity;
-  final String? truckDescription;
-  final String? status;
+  final int id;
+  final String name;
+  final String truckName;
+  final String truckIdentity;
+  final String truckDescription;
+  final String status;
   final DateTime? dateStart;
-  final dynamic dateFinish;
-  final String? product;
-  final String? quantity;
+  final DateTime? dateFinish;
+  final int productoId;
+  final String product;
+  final String quantity;
   final List<Location> locations;
+
+  String diffInHour() {
+    if (dateStart != null && dateFinish != null) {
+      Duration diff = dateFinish!.difference(dateStart!);
+      return "${diff.inHours}:${diff.inMinutes.remainder(60)} Hr.";
+    }
+    return "0 Hr.";
+  }
+
+  String getDateStart() {
+    if (dateFinish != null) {
+      String date = DateFormat('dd/MM hh:mm').format(dateStart!);
+      return date;
+    }
+    return '';
+  }
+
+  String getDateFinish() {
+    if (dateFinish != null) {
+      String date = DateFormat('dd/MM hh:mm').format(dateFinish!);
+      return date;
+    }
+    return '';
+  }
 
   factory Route.fromJson(Map<String, dynamic> json) {
     return Route(
-      id: json["id"],
-      name: json["name"],
-      truckIdentity: json["truck_identity"],
-      truckDescription: json["truck_description"],
-      status: json["status"],
+      id: json["id"] ?? 0,
+      name: json["name"] ?? "",
+      truckName: json["truck_name"] ?? "",
+      truckIdentity: json["truck_identity"] ?? "",
+      truckDescription: json["truck_description"] ?? "",
+      status: json["status"] ?? "",
       dateStart: DateTime.tryParse(json["date_start"] ?? ""),
-      dateFinish: json["date_finish"],
-      product: json["product"],
-      quantity: json["quantity"],
+      dateFinish: DateTime.tryParse(json["date_finish"] ?? ""),
+      productoId: json["producto_id"] ?? 0,
+      product: json["product"] ?? "",
+      quantity: json["quantity"] ?? "",
       locations: json["locations"] == null
           ? []
           : List<Location>.from(
@@ -268,11 +292,13 @@ class Route {
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
+        "truck_name": truckName,
         "truck_identity": truckIdentity,
         "truck_description": truckDescription,
         "status": status,
         "date_start": dateStart?.toIso8601String(),
-        "date_finish": dateFinish,
+        "date_finish": dateFinish?.toIso8601String(),
+        "producto_id": productoId,
         "product": product,
         "quantity": quantity,
         "locations": locations.map((x) => x?.toJson()).toList(),
@@ -280,62 +306,54 @@ class Route {
 
   @override
   String toString() {
-    return "$id, $name, $truckIdentity, $truckDescription, $status, $dateStart, $dateFinish, $product, $quantity, $locations, ";
+    return "$id, $name, $truckName, $truckIdentity, $truckDescription, $status, $dateStart, $dateFinish, $productoId, $product, $quantity, $locations, ";
   }
 }
 
 class Location {
   Location({
     required this.id,
-    required this.position,
     required this.description,
     required this.type,
-    required this.status,
     required this.routeId,
-    required this.companyId,
     required this.dateTime,
-    required this.deletedAt,
+    required this.name,
+    required this.status,
   });
 
-  final int? id;
-  final dynamic position;
-  final dynamic description;
-  final String? type;
-  final int? status;
-  final int? routeId;
-  final int? companyId;
+  final int id;
+  final String description;
+  final String type;
+  final int routeId;
   final dynamic dateTime;
-  final dynamic deletedAt;
+  final String name;
+  final int status;
 
   factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
-      id: json["id"],
-      position: json["position"],
-      description: json["description"],
-      type: json["type"],
-      status: json["status"],
-      routeId: json["route_id"],
-      companyId: json["company_id"],
+      id: json["id"] ?? 0,
+      description: json["description"] ?? "",
+      type: json["type"] ?? "",
+      routeId: json["route_id"] ?? 0,
       dateTime: json["date_time"],
-      deletedAt: json["deleted_at"],
+      name: json["name"] ?? "",
+      status: json["status"] ?? 0,
     );
   }
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "position": position,
         "description": description,
         "type": type,
-        "status": status,
         "route_id": routeId,
-        "company_id": companyId,
         "date_time": dateTime,
-        "deleted_at": deletedAt,
+        "name": name,
+        "status": status,
       };
 
   @override
   String toString() {
-    return "$id, $position, $description, $type, $status, $routeId, $companyId, $dateTime, $deletedAt, ";
+    return "$id, $description, $type, $routeId, $dateTime, $name, $status, ";
   }
 }
 
@@ -351,24 +369,24 @@ class User {
     required this.companyId,
   });
 
-  final int? id;
-  final String? name;
-  final String? username;
-  final String? email;
-  final String? phone;
-  final String? avatar;
-  final String? role;
+  final int id;
+  final String name;
+  final String username;
+  final String email;
+  final String phone;
+  String avatar;
+  final String role;
   final dynamic companyId;
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json["id"],
-      name: json["name"],
-      username: json["username"],
-      email: json["email"],
-      phone: json["phone"],
-      avatar: json["avatar"],
-      role: json["role"],
+      id: json["id"] ?? 0,
+      name: json["name"] ?? "",
+      username: json["username"] ?? "",
+      email: json["email"] ?? "",
+      phone: json["phone"] ?? "",
+      avatar: json["avatar"] ?? "",
+      role: json["role"] ?? "",
       companyId: json["company_id"],
     );
   }

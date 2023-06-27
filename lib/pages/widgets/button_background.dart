@@ -1,15 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:record_route/util/percent_width_height.dart';
 
-class ButtonScanner extends StatelessWidget {
+class ButtonBackground extends StatelessWidget {
   final void Function() onPressed;
-  final Color background;
+  final Color? background;
   final Color? color;
   final String label;
-  final double fontSize;
+  final double? fontSize;
   final EdgeInsets? padding;
 
-  const ButtonScanner(
+  const ButtonBackground(
       {Key? key,
       required this.onPressed,
       this.color,
@@ -25,17 +25,20 @@ class ButtonScanner extends StatelessWidget {
       style: TextButton.styleFrom(
         backgroundColor: background,
         padding: padding,
+        shadowColor: Colors.red,
       ),
       onPressed: onPressed,
       icon: Icon(
-        CupertinoIcons.qrcode_viewfinder,
+        Icons.logout,
         color: color,
+        size: 1.9.dp,
       ),
       label: Text(
         label,
         style: TextStyle(
           color: color,
-          fontSize: fontSize,
+          letterSpacing: 1,
+          fontSize: fontSize ?? 1.9.dp,
           fontWeight: FontWeight.bold,
         ),
       ),

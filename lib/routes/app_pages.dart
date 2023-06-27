@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:record_route/pages/home/home_binding.dart';
 import 'package:record_route/pages/home/home_page.dart';
-import 'package:record_route/pages/login/login.dart';
+import 'package:record_route/pages/login/login_page.dart';
 import 'package:record_route/pages/login/login_binding.dart';
 import 'package:record_route/pages/router/router_page.dart';
 import 'package:record_route/pages/router_detail/router_detail_binding.dart';

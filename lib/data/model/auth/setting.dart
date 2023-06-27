@@ -1,4 +1,3 @@
-import 'package:record_route/data/model/basic.dart';
 import 'package:record_route/data/model/user_profile.dart';
 
 class Seeting {
@@ -17,9 +16,9 @@ class Seeting {
 
   factory Seeting.fromJson(Map<String, dynamic> json) {
     return Seeting(
-        darkMode: json['darkMode'],
-        onRecord: json['onRecord'] as bool,
-        stepIndex: json['stepIndex'] as int,
+        darkMode: json['darkMode'] ?? true,
+        onRecord: json['onRecord'] ?? false,
+        stepIndex: json['stepIndex'] ?? -1,
         stations: json["stations"] == null
             ? []
             : List<Company>.from(
