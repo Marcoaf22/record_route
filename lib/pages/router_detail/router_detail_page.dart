@@ -15,7 +15,7 @@ class RouterDetailPage extends StatelessWidget {
     return GetBuilder<RouterDetailController>(
       init: RouterDetailController(),
       builder: (_) => Scaffold(
-        appBar: AppBar(title: Text('Ruta en progreso')),
+        appBar: AppBar(title: const Text('Ruta en progreso')),
         body: SafeArea(
           child: Column(
             children: [
@@ -35,13 +35,25 @@ class RouterDetailPage extends StatelessWidget {
                             title: 'Confirmar',
                             contentText: 'confirmar llegada a la planta');
                         if (result) {
-                          bool saved = await _.nextStep(2);
-                          if (saved) {
-                            ToastrService toarst = ToastrService();
-                            toarst.success(
-                                title: 'Ruta',
-                                message: 'La llegada ala planta registrada');
-                          }
+                          Get.showOverlay(
+                            asyncFunction: () async {
+                              bool saved = await _.nextStep(2);
+                              if (saved) {
+                                ToastrService toarst = ToastrService();
+                                toarst.success(
+                                    title: 'LLEGADA A LA PLANTA',
+                                    message: 'Registrado');
+                              }
+                              await Future.delayed(const Duration(seconds: 1));
+
+                              return null;
+                            },
+                            loadingWidget: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            opacity: 0.4,
+                            opacityColor: Colors.black45,
+                          );
                         }
                       },
                       background: Colors.orange,
@@ -50,23 +62,6 @@ class RouterDetailPage extends StatelessWidget {
                       index: 1,
                       indexSelected: _.setting.stepIndex,
                     ),
-                    // ButtonFinal(
-                    //   icon: Icons.play_for_work_outlined,
-                    //   onPressed: () async {
-                    //     bool result = await showAcceptDialog(
-                    //         backgroundAccept: Colors.blue,
-                    //         title: 'Confirmar',
-                    //         contentText: 'confirmar el ingreso a la planta');
-                    //     if (result) {
-                    //       _.nextStep(3);
-                    //     }
-                    //   },
-                    //   background: Colors.orange,
-                    //   label: "Ingreso a la planta",
-                    //   fontSize: 20,
-                    //   index: 2,
-                    //   indexSelected: _.setting.stepIndex,
-                    // ),
                     ButtonFinal(
                       icon: Icons.output_rounded,
                       onPressed: () async {
@@ -76,13 +71,25 @@ class RouterDetailPage extends StatelessWidget {
                             contentText:
                                 '¿Quiere confirma llegada a la planta?');
                         if (result) {
-                          bool saved = await _.nextStep(3);
-                          if (saved) {
-                            ToastrService toarst = ToastrService();
-                            toarst.success(
-                                title: 'Ruta',
-                                message: 'La salida de la planta registrada');
-                          }
+                          Get.showOverlay(
+                            asyncFunction: () async {
+                              bool saved = await _.nextStep(3);
+                              if (saved) {
+                                ToastrService toarst = ToastrService();
+                                toarst.success(
+                                    title: 'SALIDA DE PLANTA',
+                                    message: 'Registrado');
+                              }
+                              await Future.delayed(const Duration(seconds: 1));
+
+                              return null;
+                            },
+                            loadingWidget: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            opacity: 0.4,
+                            opacityColor: Colors.black45,
+                          );
                         }
                       },
                       background: Colors.orange,
@@ -102,14 +109,24 @@ class RouterDetailPage extends StatelessWidget {
                               contentText:
                                   '¿Esta seguro de finalizar la ruta?');
                           if (result) {
-                            bool saved = await _.nextStep(3 + (i + 1));
-                            if (saved) {
-                              ToastrService toarst = ToastrService();
-                              toarst.success(
-                                  title: 'Ruta',
-                                  message:
-                                      'La llegada ala estacion registrada');
-                            }
+                            Get.showOverlay(
+                              asyncFunction: () async {
+                                bool saved = await _.nextStep(3 + (i + 1));
+                                if (saved) {
+                                  ToastrService toarst = ToastrService();
+                                  toarst.success(
+                                      title: item.name, message: 'Registrado');
+                                }
+                                await Future.delayed(
+                                    const Duration(seconds: 1));
+                                return null;
+                              },
+                              loadingWidget: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                              opacity: 0.4,
+                              opacityColor: Colors.black45,
+                            );
                           }
                         },
                         background: Colors.orange,
@@ -127,17 +144,28 @@ class RouterDetailPage extends StatelessWidget {
                             title: 'Confirmar',
                             contentText: '¿Esta seguro de finalizar la ruta?');
                         if (result) {
-                          bool saved = await _.closed();
-                          if (saved) {
-                            ToastrService toarst = ToastrService();
-                            toarst.success(
-                                title: 'Ruta',
-                                message: 'La ruta ha finalizado');
-                          }
+                          Get.showOverlay(
+                            asyncFunction: () async {
+                              bool saved = await _.closed();
+                              if (saved) {
+                                ToastrService toarst = ToastrService();
+                                toarst.success(
+                                    title: 'FINALIZAR RUTA',
+                                    message: 'Registrado');
+                              }
+                              await Future.delayed(const Duration(seconds: 1));
+                              return null;
+                            },
+                            loadingWidget: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            opacity: 0.4,
+                            opacityColor: Colors.black45,
+                          );
                         }
                       },
                       background: Colors.orange,
-                      label: "Finalizar ruta",
+                      label: "FINALIZAR RUTA",
                       fontSize: 20,
                       index: 3 + (_.companies.length),
                       indexSelected: _.setting.stepIndex,

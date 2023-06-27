@@ -94,11 +94,10 @@ class Auth {
 
   Future<bool> logOut() async {
     GetLocation service = Get.find<GetLocation>();
-    service.locationCancel();
+    service.routeCancelRecord();
     service.serviceStatusCancel();
 
     await _storage.remove(key);
-    // await _storage.remove(keyInfo);
     return true;
   }
 }

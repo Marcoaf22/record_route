@@ -20,56 +20,52 @@ class HomeController extends GetxController {
   ];
 
   int indexSelected = 0;
-
   UserProfile userProfile = Auth.instance.getUser();
   // User? user = Auth.instance.getUser().user;
-
   Seeting setting = Auth.instance.getSeeting();
   Route? router;
+  GetLocation service = Get.find<GetLocation>();
 
   HomeController();
 
   @override
   void onInit() async {
     super.onInit();
-
     checkOnRoute();
   }
 
   checkOnRoute() {
     if (userProfile.routeActive != null) {
+      int stepIndex = userProfile.routeActive!.locations
+          .indexWhere((element) => element.status == 0);
+      setting.stepIndex = stepIndex == -1 ? 1 : stepIndex + 1;
+
       router = userProfile.routeActive;
       userProfile.onRoute = true;
+      service.routeActiveRecord();
     } else {
       userProfile.onRoute = false;
-      router = userProfile.routes.last;
+      if (userProfile.routes.isNotEmpty) {
+        router = userProfile.routes.last;
+      }
     }
     setting.onRecord = userProfile.onRoute;
+
+    Auth.instance.setSeeting(setting);
+    Auth.instance.setUser(userProfile.toJson());
   }
 
   @override
   void onReady() async {
     super.onReady();
-    GetLocation service = Get.find<GetLocation>();
+    print('🎁 on Ready - home');
     service.serviceStatusListen();
     service.checkPermission();
     service.checkActiveService();
-
-    Auth.instance.setSeeting(setting);
-
     update(['homeWidget']);
   }
 
   isOnRoute() {}
-
-  String getCompany() {
-    Company? a = userProfile.companies.firstWhereOrNull(
-        (element) => element.id == userProfile.user?.companyId);
-    if (a == null) {
-      return "";
-    }
-    return a.name ?? "";
-  }
 
   void updateIndexSelected(index) {
     indexSelected = index;

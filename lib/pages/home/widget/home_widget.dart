@@ -56,11 +56,12 @@ class HomeWidget extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(top: 1.5.hp, left: 30),
                     child: Text(
-                      'Cones',
+                      'CONES',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: colors.onPrimary,
-                          fontSize: 2.7.dp),
+                          letterSpacing: 2,
+                          fontSize: 2.9.dp),
                     ),
                   ),
                 ],
@@ -261,10 +262,35 @@ class HomeWidget extends StatelessWidget {
                         ],
                       ),
                     ),
+              SizedBox(height: 2.0.hp),
               ButtonBackground(
                 onPressed: () {
-                  Auth.instance.logOut();
-                  Get.offAllNamed(Routes.login);
+                  // Get.bottomSheet(Text('hoa'));
+
+                  Get.showOverlay(
+                    asyncFunction: () async {
+                      await Future.delayed(Duration(seconds: 5), () {
+                        return null;
+                      });
+                      return null;
+                    },
+                    loadingWidget: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    opacity: 0.4,
+                    opacityColor: Colors.black45,
+                  );
+
+                  // Get.defaultDialog(
+                  //     title: 'true',
+                  //     backgroundColor: Colors.white,
+                  //     buttonColor: Colors.red,
+                  //     radius: 20,
+                  //     cancel: Text('sal'),
+                  //     textConfirm: 'Salir',
+                  //     textCancel: 'Cancelar');
+                  // Auth.instance.logOut();
+                  // Get.offAllNamed(Routes.login);
                 },
                 background: Colors.red,
                 color: Colors.white,

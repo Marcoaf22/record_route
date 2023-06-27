@@ -1,10 +1,9 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:record_route/data/model/basic.dart';
 import 'package:record_route/data/model/user_profile.dart';
 import 'package:record_route/pages/home/home_controller.dart';
+import 'package:record_route/util/percent_width_height.dart';
 
 import 'package:record_route/pages/router_form/router_form_controller.dart';
 import 'package:record_route/routes/app_pages.dart';
@@ -45,7 +44,7 @@ class RouterFormPage extends StatelessWidget {
                       ),
                       const Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text('Seleccione un producto'),
+                        child: Text('Seleccionar producto'),
                       ),
                       Center(
                         child: DropdownButtonHideUnderline(
@@ -144,7 +143,7 @@ class RouterFormPage extends StatelessWidget {
                       ),
                       const Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text('Seleccione una planta'),
+                        child: Text('Seleccionar planta origen'),
                       ),
                       Center(
                         child: DropdownButtonHideUnderline(
@@ -242,7 +241,7 @@ class RouterFormPage extends StatelessWidget {
                       ),
                       const Padding(
                         padding: EdgeInsets.all(8),
-                        child: Text('Seleccione las EESS'),
+                        child: Text('Seleccionar EESS destino'),
                       ),
                       Expanded(
                         child: SizedBox(
@@ -286,7 +285,7 @@ class RouterFormPage extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(item.name ?? ''),
+                                      Text(item.name),
                                       Text(item.index > 0
                                           ? item.index.toString()
                                           : ''),
@@ -299,58 +298,22 @@ class RouterFormPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
+                      SizedBox(
+                        width: 80.0.wp,
                         child: TextButton(
                           style: TextButton.styleFrom(
                               backgroundColor: Colors.blueAccent),
-                          child: const Text(
-                            'Iniciar Ruta',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () async {
-                            if (_.entity.name.isEmpty) {
-                              ToastrService().info('Faltan datos',
-                                  'El nombre de la ruta es requerido');
-                              return;
-                            }
-
-                            if (_.plant == null) {
-                              ToastrService().info('Faltan datos',
-                                  'Debe seleccionar una planta');
-                              return;
-                            }
-                            if (_.product == null) {
-                              ToastrService().info('Faltan datos',
-                                  'Debe seleccionar un producto');
-                              return;
-                            }
-
-                            if (_.validateForm()) {
-                              ToastrService().info(
-                                  'Faltan datos', 'Debe seleccionar una EESS');
-                              return;
-                            }
-
-                            bool result = false;
-                            result = await _.validateServiceEnable();
-                            if (!result) {
-                              ToastrService().info(
-                                  'ERROR', 'Debe habilitar el servicio de GPS');
-                            }
-                            result = await _.save();
-                            if (result) {
-                              HomeController home = Get.find<HomeController>();
-                              home.updateSetting();
-
-                              ToastrService().success(
-                                  title: 'Ruta',
-                                  message: 'La ruta ha sido creada');
-                              Get.offAndToNamed(Routes.routerDetail);
-                            }
+                          onPressed: () {
+                            save(_);
                           },
+                          child: Text(
+                            'Iniciar Ruta',
+                            style: TextStyle(
+                                color: Colors.white, fontSize: 2.0.dp),
+                          ),
                         ),
-                      )
+                      ),
+                      SizedBox(height: 8.0.hp)
                     ],
                   ),
                 )
@@ -360,5 +323,41 @@ class RouterFormPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  save(_) async {
+    if (_.entity.name.isEmpty) {
+      ToastrService().info('Faltan datos', 'El nombre de la ruta es requerido');
+      return;
+    }
+
+    if (_.plant == null) {
+      ToastrService().info('Faltan datos', 'Debe seleccionar una planta');
+      return;
+    }
+    if (_.product == null) {
+      ToastrService().info('Faltan datos', 'Debe seleccionar un producto');
+      return;
+    }
+
+    if (_.validateForm()) {
+      ToastrService().info('Faltan datos', 'Debe seleccionar una EESS');
+      return;
+    }
+
+    bool result = false;
+    result = await _.validateServiceEnable();
+    if (!result) {
+      ToastrService().info('ERROR', 'Debe habilitar el servicio de GPS');
+      return;
+    }
+    result = await _.save();
+    if (result) {
+      HomeController home = Get.find<HomeController>();
+      home.updateSetting();
+
+      ToastrService().success(title: 'Ruta', message: 'La ruta ha sido creada');
+      Get.offAndToNamed(Routes.routerDetail);
+    }
   }
 }

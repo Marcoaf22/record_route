@@ -29,15 +29,6 @@ class Authentication {
           createdAt: DateTime.now().toString(),
           tokenType: response.data['data']['token_type']);
 
-      if (user.routeActive != null) {
-        user.onRoute = true;
-        int stepIndex = user.routeActive!.locations
-            .indexWhere((element) => element.status == 0);
-        Seeting setting = Auth.instance.getSeeting();
-        setting.stepIndex = stepIndex == -1 ? 1 : stepIndex + 1;
-        Auth.instance.setSeeting(setting);
-      }
-
       await Auth.instance.setSession(session);
       await Auth.instance.setUser(user.toJson());
 

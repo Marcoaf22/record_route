@@ -79,7 +79,6 @@ class RouterFormController extends GetxController {
   }
 
   initLocation() async {
-    locationService.serviceStatusListen();
     locationService.locationListen();
     locationService.initSendLocation();
   }

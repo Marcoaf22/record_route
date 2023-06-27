@@ -91,6 +91,8 @@ class GetLocation {
   }
 
   void locationListen() async {
+    print('LOCATION LISTEN');
+
     LocationSettings locationSettings = const LocationSettings(
       accuracy: LocationAccuracy.high,
       distanceFilter: 10,
@@ -98,7 +100,6 @@ class GetLocation {
 
     bool result = await validatePermissions();
     if (!result) return;
-
     RowLocationDB db = RowLocationDB();
     await db.open();
     positionStream =
@@ -169,7 +170,9 @@ class GetLocation {
   }
 
   void initSendLocation() {
-    timer = Timer.periodic(const Duration(minutes: 5), (timer) async {
+    print('🎢 init send data');
+    timer = Timer.periodic(const Duration(minutes: 1), (timer) async {
+      print('ENVIANDO DATA');
       List<Map> list = await getLocations();
       bool result = await request.post(url: '/routes/locations', body: list);
       if (result) {
@@ -185,5 +188,15 @@ class GetLocation {
   Future<void> requestLocationService() async {
     //bool test = await location.serviceEnabled();
     //print('request ' + test.toString());
+  }
+
+  void routeActiveRecord() {
+    locationListen();
+    initSendLocation();
+  }
+
+  void routeCancelRecord() {
+    positionStream?.cancel();
+    timer?.cancel();
   }
 }

@@ -106,11 +106,12 @@ class RouterDetailController extends GetxController {
         await savePosition(router.locations[router.locations.length - 1].id);
     if (!result) return false;
 
-    List<Map> list = await prepareData();
+    List<Map> list = await service.getLocations();
+    print(list.toString());
     result = await request.put(url: '/routes/finish/${router.id}', body: list);
     if (result) {
       await updateRoute(router.id);
-      service.locationCancel();
+      service.routeCancelRecord();
       Get.back();
       return true;
     }
