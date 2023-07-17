@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-//import 'package:location/location.dart';
+import 'package:location/location.dart';
 import 'package:record_route/data/model/auth/auth.dart';
 import 'package:record_route/data/service/get_location.dart';
 import 'package:record_route/pages/home/home_controller.dart';
-import 'package:record_route/pages/router_form/widget/button_option.dart';
 import 'package:record_route/pages/widgets/button_background.dart';
 import 'package:record_route/routes/app_pages.dart';
 import 'package:record_route/util/percent_width_height.dart';
 import 'package:record_route/util/toastr.dart';
+
+import '../../../util/dialogs.dart';
 
 class HomeWidget extends StatelessWidget {
   final toastr = ToastrService();
@@ -30,19 +31,26 @@ class HomeWidget extends StatelessWidget {
                     width: 100.0.wp,
                     decoration: const BoxDecoration(color: Colors.yellowAccent),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        const Text('La ubicacion no esta habilitada'),
+                        Text(
+                          ' La ubicacion no esta habilitada',
+                          style: TextStyle(fontSize: 1.35.dp),
+                        ),
                         TextButton(
                           onPressed: () async {
-                            //        Location location = Location();
-                            //  bool isEnable = await location.serviceEnabled();
-                            //if (!isEnable) {
-                            //    bool result = await location.requestService();
-                            service.hideLocation();
-                            //}
-                            // service.requestLocationService();
+                            Location location = Location();
+                            bool isEnable = await location.serviceEnabled();
+                            if (!isEnable) {
+                              bool result = await location.requestService();
+                              service.hideLocation();
+                            }
+                            service.requestLocationService();
                           },
-                          child: const Text('Activar GPS'),
+                          child: Text(
+                            'Activar GPS',
+                            style: TextStyle(fontSize: 1.35.dp),
+                          ),
                         ),
                       ],
                     ),
@@ -218,18 +226,13 @@ class HomeWidget extends StatelessWidget {
                               children: [
                                 Text(
                                   _.router?.name ?? '',
-                                  style: const TextStyle(),
+                                  style: TextStyle(fontSize: 1.69.dp),
                                 ),
                                 Text(
-                                  "Hora Inicio: ${_.router?.getDateStart()}",
+                                  "Fecha: ${_.router?.getDate()}",
                                   style: const TextStyle(
                                       fontSize: 11, fontFamily: 'Roboco'),
-                                ),
-                                Text(
-                                  "Hora Fin: ${_.router?.getDateFinish()}",
-                                  style: const TextStyle(
-                                      fontSize: 11, fontFamily: 'Roboco'),
-                                ),
+                                )
                               ],
                             ),
                           ),
@@ -264,33 +267,15 @@ class HomeWidget extends StatelessWidget {
                     ),
               SizedBox(height: 2.0.hp),
               ButtonBackground(
-                onPressed: () {
-                  // Get.bottomSheet(Text('hoa'));
-
-                  Get.showOverlay(
-                    asyncFunction: () async {
-                      await Future.delayed(Duration(seconds: 5), () {
-                        return null;
-                      });
-                      return null;
-                    },
-                    loadingWidget: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                    opacity: 0.4,
-                    opacityColor: Colors.black45,
-                  );
-
-                  // Get.defaultDialog(
-                  //     title: 'true',
-                  //     backgroundColor: Colors.white,
-                  //     buttonColor: Colors.red,
-                  //     radius: 20,
-                  //     cancel: Text('sal'),
-                  //     textConfirm: 'Salir',
-                  //     textCancel: 'Cancelar');
-                  // Auth.instance.logOut();
-                  // Get.offAllNamed(Routes.login);
+                onPressed: () async {
+                  bool result = await showAcceptDialog(
+                      title: 'Salir',
+                      contentText: '¿Esta seguro de salir?',
+                      backgroundAccept: Colors.blue);
+                  if (result) {
+                    Auth.instance.logOut();
+                    Get.offAllNamed(Routes.login);
+                  }
                 },
                 background: Colors.red,
                 color: Colors.white,

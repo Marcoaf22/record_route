@@ -43,25 +43,25 @@ class RouterPage extends StatelessWidget {
                 ),
               );
             }
-            return Container();
-          }),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 1.5.hp, left: 30),
-                child: Text(
-                  'CONES',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: colors.onPrimary,
-                      letterSpacing: 2,
-                      fontSize: 2.9.dp),
+
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 1.5.hp, left: 30),
+                  child: Text(
+                    'CONES',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: colors.onPrimary,
+                        letterSpacing: 2,
+                        fontSize: 2.9.dp),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: 2.0.hp),
+              ],
+            );
+          }),
+          // SizedBox(height: 2.0.hp),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -127,28 +127,61 @@ class RouterPage extends StatelessWidget {
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(left: 15),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    router.name,
-                                    style: const TextStyle(),
-                                  ),
-                                  Text(
-                                    "Hora Inicio: ${router.getDateStart()}",
-                                    style: const TextStyle(
-                                        fontSize: 11, fontFamily: 'Roboco'),
-                                  ),
-                                  Text(
-                                    "Hora Fin: ${router.getDateFinish()}",
-                                    style: const TextStyle(
-                                        fontSize: 11, fontFamily: 'Roboco'),
-                                  ),
-                                ],
+                              child: Container(
+                                width: 42.0.wp,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 2.0),
+                                      child: Text(
+                                        router.name,
+                                        style: TextStyle(fontSize: 1.6.dp),
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text(
+                                          "Fecha Inicio: ",
+                                          style: TextStyle(
+                                              fontSize: 11,
+                                              fontFamily: 'Roboco'),
+                                        ),
+                                        Text(
+                                          "${router.getDateStart()} ",
+                                          style: const TextStyle(
+                                              fontSize: 11,
+                                              fontFamily: 'Roboco'),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text(
+                                          "Fecha Fin: ",
+                                          style: TextStyle(
+                                              fontSize: 11,
+                                              fontFamily: 'Roboco'),
+                                        ),
+                                        Text(
+                                          "${router.getDateFinish()} ",
+                                          style: const TextStyle(
+                                              fontSize: 11,
+                                              fontFamily: 'Roboco'),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-                            const Spacer(),
+                            // const Spacer(),
                             Padding(
                               padding: const EdgeInsets.only(right: 15),
                               child: Column(

@@ -248,14 +248,22 @@ class Route {
   String diffInHour() {
     if (dateStart != null && dateFinish != null) {
       Duration diff = dateFinish!.difference(dateStart!);
-      return "${diff.inHours}:${diff.inMinutes.remainder(60)} Hr.";
+      return "${diff.inHours}:${diff.inMinutes.remainder(60) < 10 ? '0' : ''}${diff.inMinutes.remainder(60)} Hr.";
     }
     return "0 Hr.";
   }
 
+  String getDate() {
+    if (dateStart != null) {
+      String date = DateFormat('yyyy/MM/dd HH:mm').format(dateStart!);
+      return date;
+    }
+    return '';
+  }
+
   String getDateStart() {
-    if (dateFinish != null) {
-      String date = DateFormat('dd/MM hh:mm').format(dateStart!);
+    if (dateStart != null) {
+      String date = DateFormat('yyyy/MM/dd HH:mm').format(dateStart!);
       return date;
     }
     return '';
@@ -263,7 +271,7 @@ class Route {
 
   String getDateFinish() {
     if (dateFinish != null) {
-      String date = DateFormat('dd/MM hh:mm').format(dateFinish!);
+      String date = DateFormat('yyyy/MM/dd HH:mm').format(dateFinish!);
       return date;
     }
     return '';
