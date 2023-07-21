@@ -41,6 +41,8 @@ dependencies:
   dio:
   path: ^1.8.3
   location: ^4.4.0
+  background_locator_2: 
+  ##background_locator: ^1.6.12
   font_awesome_flutter:
   flutter_svg:
   get_storage:

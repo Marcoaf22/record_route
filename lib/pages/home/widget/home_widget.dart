@@ -8,6 +8,7 @@ import 'package:record_route/pages/widgets/button_background.dart';
 import 'package:record_route/routes/app_pages.dart';
 import 'package:record_route/util/percent_width_height.dart';
 import 'package:record_route/util/toastr.dart';
+import 'package:record_route/util/utils.dart';
 
 import '../../../util/dialogs.dart';
 
@@ -268,6 +269,18 @@ class HomeWidget extends StatelessWidget {
               SizedBox(height: 2.0.hp),
               ButtonBackground(
                 onPressed: () async {
+                  
+                  // print(DateTime.now().toIso8601String());
+                  // print(DateTime.now().toLocal());
+                  // print(DateTime.now().toUtc());
+
+                  
+                  // print(DateTime.now().toString());
+                  // String a = removeMillisecondsFromDateTime(DateTime.now().toString());
+                  // print('formateadon');
+                  // print(a);
+                  // DateTime b = DateTime.parse(a);
+                  // print(b.toString());
                   bool result = await showAcceptDialog(
                       title: 'Salir',
                       contentText: '¿Esta seguro de salir?',

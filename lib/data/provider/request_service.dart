@@ -40,6 +40,7 @@ class RequestService {
 
   Future<bool> post({required String url, Object? body}) async {
     try {
+      print(body.toString());
       final Response response = await _dio.post(url, data: body);
       return true;
     } catch (e) {

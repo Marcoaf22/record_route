@@ -7,7 +7,6 @@ import 'package:record_route/util/percent_width_height.dart';
 
 import 'package:record_route/pages/router_form/router_form_controller.dart';
 import 'package:record_route/routes/app_pages.dart';
-import 'package:record_route/util/percent_width_height.dart';
 import 'package:record_route/util/toastr.dart';
 
 class RouterFormPage extends StatelessWidget {
@@ -26,22 +25,6 @@ class RouterFormPage extends StatelessWidget {
                 Expanded(
                   child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 20.0, right: 20, bottom: 10, top: 20),
-                        child: TextField(
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              hintText: 'Nombre de ruta'),
-                          onChanged: (String value) {
-                            if (value != null) {
-                              _.entity.name = value;
-                            }
-                          },
-                        ),
-                      ),
                       const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text('Seleccionar producto'),
@@ -326,10 +309,6 @@ class RouterFormPage extends StatelessWidget {
   }
 
   save(_) async {
-    if (_.entity.name.isEmpty) {
-      ToastrService().info('Faltan datos', 'El nombre de la ruta es requerido');
-      return;
-    }
 
     if (_.plant == null) {
       ToastrService().info('Faltan datos', 'Debe seleccionar una planta');

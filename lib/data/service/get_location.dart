@@ -86,7 +86,6 @@ class GetLocation {
         return false;
       }
     }
-
     return true;
   }
 
@@ -171,7 +170,7 @@ class GetLocation {
 
   void initSendLocation() {
     print('🎢 init send data');
-    timer = Timer.periodic(const Duration(minutes: 1), (timer) async {
+    timer = Timer.periodic(const Duration(minutes: 4), (timer) async {
       print('ENVIANDO DATA');
       List<Map> list = await getLocations();
       bool result = await request.post(url: '/routes/locations', body: list);

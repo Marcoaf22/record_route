@@ -1,4 +1,5 @@
 import 'package:record_route/core/utils/database.dart';
+import 'package:record_route/util/utils.dart';
 import 'package:sqflite/sqflite.dart';
 
 class RowLocation {
@@ -37,7 +38,7 @@ class RowLocation {
         "latitude": latitude,
         "longitude": longitude,
         "route_id": routeId,
-        "date_time": dateTime?.toIso8601String(),
+        "date_time": dateTime != null ? removeMillisecondsFromDateTime(dateTime!.toIso8601String()) : '',
         "state": state,
         "driver_id": driverId
       };

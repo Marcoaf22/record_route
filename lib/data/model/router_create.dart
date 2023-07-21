@@ -1,3 +1,5 @@
+import 'package:record_route/util/utils.dart';
+
 class RouterCreate {
   RouterCreate({
     required this.name,
@@ -36,7 +38,7 @@ class RouterCreate {
 
   Map<String, dynamic> toJson() => {
         "name": name,
-        "date_start": dateStart?.toIso8601String(),
+        "date_start": dateStart != null ? removeMillisecondsFromDateTime(dateStart!.toIso8601String()) : '',
         "driver_id": driverId,
         "producto_id": productoId,
         "quantity": quantity,
