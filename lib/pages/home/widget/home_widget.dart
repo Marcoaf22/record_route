@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+// import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:location/location.dart';
 import 'package:record_route/data/model/auth/auth.dart';
+import 'package:record_route/data/model/auth/setting.dart';
+import 'package:record_route/data/model/database/setting.dart';
+import 'package:record_route/data/model/user_profile.dart';
 import 'package:record_route/data/service/get_location.dart';
 import 'package:record_route/pages/home/home_controller.dart';
 import 'package:record_route/pages/widgets/button_background.dart';
@@ -20,7 +25,7 @@ class HomeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     return GetBuilder<HomeController>(
-      id: 'homeWidget',
+      // id: 'homeWidget',
       builder: (_) {
         return Center(
           child: Column(
@@ -40,13 +45,11 @@ class HomeWidget extends StatelessWidget {
                         ),
                         TextButton(
                           onPressed: () async {
-                            Location location = Location();
-                            bool isEnable = await location.serviceEnabled();
-                            if (!isEnable) {
-                              bool result = await location.requestService();
-                              service.hideLocation();
-                            }
-                            service.requestLocationService();
+                            // bool result =
+                            //     await Geolocator.isLocationServiceEnabled();
+                            // if (!result) {
+                            //   await Geolocator.openLocationSettings();
+                            // }
                           },
                           child: Text(
                             'Activar GPS',
@@ -79,13 +82,14 @@ class HomeWidget extends StatelessWidget {
                 height: 50,
               ),
               ClipRRect(
-                  borderRadius: BorderRadius.circular(35.0.wp / 2),
-                  child: GetBuilder<HomeController>(builder: (_) {
+                borderRadius: BorderRadius.circular(35.0.wp / 2),
+                child: GetBuilder<HomeController>(
+                  builder: (_) {
                     String? path = _.userProfile.user?.avatar;
                     if (path == null || path.isEmpty) {
                       return Container(
-                        height: 45.0.wp,
-                        width: 45.0.wp,
+                        height: 35.0.wp,
+                        width: 35.0.wp,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             colorFilter: ColorFilter.mode(
@@ -126,7 +130,9 @@ class HomeWidget extends StatelessWidget {
                         ),
                       ),
                     );
-                  })),
+                  },
+                ),
+              ),
               Container(
                 height: 2.0.hp,
               ),
@@ -267,20 +273,40 @@ class HomeWidget extends StatelessWidget {
                       ),
                     ),
               SizedBox(height: 2.0.hp),
+              Text(
+                  'Con permisos: ${_.hasPermissions}, index: ${_.index} y solicitud: ${_.requestLocation}'),
               ButtonBackground(
                 onPressed: () async {
-                  
-                  // print(DateTime.now().toIso8601String());
-                  // print(DateTime.now().toLocal());
-                  // print(DateTime.now().toUtc());
+                  _.hasPermissions = await _.service.verifyPermissions();
 
-                  
-                  // print(DateTime.now().toString());
-                  // String a = removeMillisecondsFromDateTime(DateTime.now().toString());
-                  // print('formateadon');
-                  // print(a);
-                  // DateTime b = DateTime.parse(a);
-                  // print(b.toString());
+                  // RowSettingDB db = RowSettingDB();
+                  // await db.open();
+                  // int count = await db.count();
+                  // print('count $count');
+                  // await db.updateStep(
+                  //     Seeting(darkMode: false, stepIndex: 3, onRecord: false));
+                  String? token = await Auth.instance.getToken();
+                  print('token $token');
+
+                  UserProfile user =  await Auth.instance.getUser();
+                  print('user ${user.user?.name}');
+
+
+                  _.index = await Auth.instance.getStep();
+                  print('preference step : ${_.index}');
+                  Auth.instance.step(_.index + 1);
+                  _.updateScreen();
+
+                  // Seeting s = Auth.instance.getSeeting();
+                  // _.index = s.stepIndex;
+                  // _.updateScreen();
+                  // print('index: ${_.index}');
+                  // print('permiso: ${_.hasPermissions}');
+                  // print('solicitud ${_.requestLocation}');
+                  // print('mas 1 index: ');
+                  // s.stepIndex = s.stepIndex + 1;
+                  // await Auth.instance.setSeeting(s);
+
                   bool result = await showAcceptDialog(
                       title: 'Salir',
                       contentText: '¿Esta seguro de salir?',

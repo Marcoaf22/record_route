@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 typedef Validando<T> = String? Function(String? value);
 
@@ -10,7 +9,6 @@ class InputText extends StatelessWidget {
   final bool borderEnable;
   final double fontSize;
   final void Function(String text) onChanged;
-  // final String Function(String text) validator;
   final Validando<String>? validator;
 
   const InputText(

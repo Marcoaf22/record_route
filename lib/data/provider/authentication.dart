@@ -4,7 +4,6 @@ import 'package:get/instance_manager.dart';
 import 'package:record_route/core/common/services.dart';
 import 'package:record_route/core/utils/enviroments.dart';
 import 'package:record_route/data/model/auth/auth.dart';
-import 'package:record_route/data/model/auth/setting.dart';
 import 'package:record_route/data/model/user_profile.dart';
 import 'package:record_route/util/message.dart';
 import 'package:record_route/util/toastr.dart';

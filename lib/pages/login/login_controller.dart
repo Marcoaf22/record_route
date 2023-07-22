@@ -1,20 +1,18 @@
 import 'package:get/get.dart';
-//import 'package:flutter_native_splash/flutter_native_splash.dart';
-
-import 'package:record_route/data/model/auth/auth.dart';
 import 'package:record_route/data/provider/authentication.dart';
-import '../../data/model/auth/setting.dart';
 
 enum LoginState { loading, initial }
 
 class LoginController extends GetxController {
   Rx<LoginState> state = LoginState.initial.obs;
 
-  LoginController();
+  LoginController(){
+    print('Constr lognControllen');
+  }
 
   @override
   void onInit() {
-   // FlutterNativeSplash.remove();
+    print('🎶 init login controller');
     super.onInit();
   }
 

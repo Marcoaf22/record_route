@@ -21,15 +21,8 @@ class HomePage extends StatelessWidget {
             child: Stack(
               children: [
                 Container(
-                  color: Colors.red,
+                  color: Colors.white,
                 ),
-                // _.requestLocation
-                //     ? Container(
-                //         width: 100.0.wp,
-                //         decoration: BoxDecoration(color: Colors.yellowAccent),
-                //         child: Text('Habilitar ubicacion'),
-                //       )
-                //     : const SizedBox.shrink(),
                 Positioned(
                   top: 7.0.hp,
                   child: Container(
@@ -48,7 +41,7 @@ class HomePage extends StatelessWidget {
                     child: Transform.rotate(
                       angle: math.pi / 5,
                       child: Container(
-                        height: 27.0.hp,
+                        height: 37.0.hp,
                         width: 210.0.wp,
                         decoration: const BoxDecoration(
                           borderRadius:

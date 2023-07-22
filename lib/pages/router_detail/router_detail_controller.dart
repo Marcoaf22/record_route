@@ -1,4 +1,4 @@
-import 'package:geolocator/geolocator.dart';
+// import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 import 'package:record_route/data/model/auth/auth.dart';
@@ -13,18 +13,28 @@ import 'package:record_route/pages/router/router_controller.dart';
 class RouterDetailController extends GetxController {
   late Route router;
 
-  User? user = Auth.instance.getUser().user;
+  User? user;
   bool disabled = false;
 
   List<Location> companies = [];
   Company? fuelPlant;
-  Seeting setting = Auth.instance.getSeeting();
-  UserProfile userProfile = Auth.instance.getUser();
+  Seeting setting = Seeting.fromJson({});
+  UserProfile userProfile = UserProfile.fromJson({});
 
   GetLocation service = Get.find<GetLocation>();
   RequestService request = Get.find<RequestService>();
 
   RouterDetailController() {
+  }
+
+  oninit
+
+  initData() async  {
+    setting = await Auth.instance.getSeeting();
+    userProfile = await Auth.instance.getUser();
+
+    user = userProfile.user;
+
     fuelPlant = setting.fuelPlant;
     router = userProfile.routeActive!;
 
@@ -67,25 +77,26 @@ class RouterDetailController extends GetxController {
 
   Future<bool> savePosition(int locationId) async {
     try {
-      Position position = await service.determinePosition();
+      // Position position = await service.determinePosition();
 
-      RowLocation row = RowLocation(
-        dateTime: DateTime.now(),
-        latitude: position.latitude.toString(),
-        driverId: userProfile.driver?.id ?? 0,
-        longitude: position.longitude.toString(),
-        routeId: router.id,
-        id: locationId,
-      );
+      // RowLocation row = RowLocation(
+      //   dateTime: DateTime.now(),
+      //   latitude: position.latitude.toString(),
+      //   driverId: userProfile.driver?.id ?? 0,
+      //   longitude: position.longitude.toString(),
+      //   routeId: router.id,
+      //   id: locationId,
+      // );
 
-      RowLocationDB db = RowLocationDB();
-      await db.open();
-      List<Map> list = [row.toJson()];
-      print(row.dateTime);
-      bool result = await request.post(url: '/routes/locations', body: list);
-      await db.insert(row);
+      // RowLocationDB db = RowLocationDB();
+      // await db.open();
+      // List<Map> list = [row.toJson()];
+      // bool result = await request.post(url: '/routes/locations', body: list);
+      // await db.insert(row);
 
-      return result;
+      // return result;
+
+      return true;
     } catch (e) {
       return false;
     }
@@ -107,7 +118,6 @@ class RouterDetailController extends GetxController {
     if (!result) return false;
 
     List<Map> list = await service.getLocations();
-    print(list.toString());
     result = await request.put(url: '/routes/finish/${router.id}', body: list);
     if (result) {
       await updateRoute(router.id);

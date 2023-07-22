@@ -10,16 +10,24 @@ import 'package:record_route/routes/app_pages.dart';
 class RouterController extends GetxController {
   List<Route> routes = [];
   bool onRecord = false;
-  Seeting setting = Auth.instance.getSeeting();
 
-  UserProfile userProfile = Auth.instance.getUser();
-  // User? user = Auth.instance.getUser().user;
+  Seeting setting = Seeting.fromJson({});
+  UserProfile userProfile = UserProfile.fromJson({});
 
   List<Basic> startLocations = [];
   List<Basic> location = [];
 
   RouterController() {
-    routes = Auth.instance.getUser().routes;
+    initData();
+  }
+
+  initData() async{
+    setting = await Auth.instance.getSeeting();
+    userProfile = await Auth.instance.getUser();
+
+    routes = userProfile.routes;
+
+    update();
   }
 
   editRouter() {
@@ -35,10 +43,16 @@ class RouterController extends GetxController {
     return a.name;
   }
 
-  updateSetting() {
-    setting = Auth.instance.getSeeting();
-    userProfile = Auth.instance.getUser();
+  updateSetting() async{
+    setting = await Auth.instance.getSeeting();
+    userProfile = await Auth.instance.getUser();
     routes = userProfile.routes;
     update();
+  }
+
+  @override
+  void onClose() {
+    print('close controller');
+    super.onClose();
   }
 }

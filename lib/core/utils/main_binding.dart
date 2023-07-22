@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:geolocator/geolocator.dart';
+
 import 'package:get/get.dart';
 import 'package:record_route/core/common/services.dart';
 import 'package:record_route/core/utils/enviroments.dart';
@@ -10,7 +10,7 @@ import 'package:record_route/data/service/get_location.dart';
 import 'database.dart';
 
 class MainBinding implements Bindings {
-  late LocationSettings locationSettings;
+  // late LocationSettings locationSettings;
 
   @override
   void dependencies() {
@@ -29,12 +29,12 @@ class MainBinding implements Bindings {
     db.createTable();
   }
 
-  initConfig() {
-    locationSettings = AndroidSettings(
-      accuracy: LocationAccuracy.high,
-      distanceFilter: 100,
-      forceLocationManager: true,
-      intervalDuration: const Duration(seconds: 10),
+  // initConfig() {
+  //   locationSettings = AndroidSettings(
+  //     accuracy: LocationAccuracy.high,
+  //     distanceFilter: 100,
+  //     forceLocationManager: true,
+  //     intervalDuration: const Duration(seconds: 10),
       //(Optional) Set foreground notification config to keep the app alive
       //when going to the background
 
@@ -44,6 +44,6 @@ class MainBinding implements Bindings {
       //   notificationTitle: "Running in Background",
       //   enableWakeLock: true,
       // ),
-    );
-  }
+    // );
+  // }
 }

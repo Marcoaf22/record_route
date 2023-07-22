@@ -36,18 +36,18 @@ dependencies:
   cupertino_icons: ^1.0.2
   intl: ^0.18.1
   
-  geolocator: ^9.0.2
-  get:
+  ##geolocator: 9.0.0
+  get: 4.6.4
   dio:
   path: ^1.8.3
-  location: ^4.4.0
-  background_locator_2: 
+  ##obackground_locator_2: 
   ##background_locator: ^1.6.12
   font_awesome_flutter:
   flutter_svg:
-  get_storage:
+  ##get_storage: 
   cached_network_image: ^3.2.3
   sqflite: ^2.2.8+4
+  shared_preferences: ^2.2.0
   simple_shadow: 
   dropdown_button2: ^2.1.4
   # flutter_background_service:

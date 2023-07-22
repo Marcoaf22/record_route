@@ -14,24 +14,35 @@ import 'package:record_route/data/service/get_location.dart';
 class RouterFormController extends GetxController {
   RouterCreate entity = RouterCreate.empty();
 
-  Seeting setting = Auth.instance.getSeeting();
+  Seeting setting = Seeting.fromJson({});
   Company? plant;
   Product? product;
 
-  List<Company> plants = Auth.instance.getUser().factories;
-  List<Company> stations = Auth.instance.getUser().companies;
-  List<Product> products = Auth.instance.getUser().products;
+  List<Company> plants = [];
+  List<Company> stations = [];
+  List<Product> products = [];
 
-  UserProfile user = Auth.instance.getUser();
+  UserProfile user = UserProfile.fromJson({});
   GetLocation locationService = Get.find<GetLocation>();
   RequestService service = Get.find<RequestService>();
 
-  RouterFormController() {
+  RouterFormController() {}
+
+  initData() async {
+    setting = await Auth.instance.getSeeting();
+    user = await Auth.instance.getUser();
+
+    plants = user.factories;
+    stations = user.companies;
+    products = user.products;
+
     stations = stations.map((e) {
       e.index = 0;
       e.selected = false;
       return e;
     }).toList();
+
+    update();
   }
 
   bool validateForm() {

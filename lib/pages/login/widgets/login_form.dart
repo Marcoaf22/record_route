@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:get/get.dart';
 import 'package:record_route/pages/login/login_controller.dart';
 import 'package:record_route/pages/login/widgets/input_text.dart';
@@ -21,7 +20,6 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    // final Responsive responsive = Responsive.of(context)
     return Positioned(
       bottom: 30,
       left: 20,

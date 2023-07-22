@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:record_route/data/service/get_location.dart';
 
@@ -6,7 +7,6 @@ import 'package:record_route/pages/router/router_controller.dart';
 import 'package:record_route/routes/app_pages.dart';
 import 'package:record_route/util/percent_width_height.dart';
 import 'package:record_route/data/model/user_profile.dart' as Models;
-//import 'package:location/location.dart';
 
 class RouterPage extends StatelessWidget {
   const RouterPage({super.key});
@@ -29,13 +29,11 @@ class RouterPage extends StatelessWidget {
                     const Text('La ubicacion no esta habilitada'),
                     TextButton(
                       onPressed: () async {
-                        // Location location = new Location();
-                        // bool isEnable = await location.serviceEnabled();
-                        // if (!isEnable) {
-                        //   bool result = await location.requestService();
-                        //   service.hideLocation();
+                        // bool result =
+                        //     await Geolocator.isLocationServiceEnabled();
+                        // if (!result) {
+                        //   await Geolocator.openLocationSettings();
                         // }
-                        // service.requestLocationService();
                       },
                       child: const Text('Activar GPS'),
                     ),

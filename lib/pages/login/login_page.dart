@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+
 import 'package:record_route/pages/login/login_controller.dart';
 import 'package:record_route/pages/login/widgets/icon_container.dart';
 import 'package:record_route/pages/login/widgets/login_form.dart';
@@ -39,14 +40,6 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
                   const LoginForm(),
-                  // Positioned(
-                  //   bottom: 50,
-                  //   child: TextButton(
-                  //       onPressed: () {},
-                  //       child: const Text(
-                  //         '¿Olvidaste tu Contraseña?',
-                  //       )),
-                  // ),
                   Positioned.fill(
                     child: Obx(
                       () {
